@@ -1,5 +1,5 @@
 {
-  description: "NixOS Configuration with Caelestia Shell and Home Manager";
+  description = "NixOS Configuration with Caelestia Shell and Home Manager";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
