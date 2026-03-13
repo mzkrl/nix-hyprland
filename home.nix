@@ -307,11 +307,11 @@ services.dunst = {
   # Hyprland Configuration via Home Manager
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-    plugins = [
-      inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
-      inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
-    ];
+    # package = inputs.hyprland.packages.${pkgs.system}.hyprland; # Matikan ini biar gak rebuild
+    # plugins = [
+    #   inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
+    #   inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
+    # ];
     
     extraConfig = builtins.readFile ./hypr/hyprland.conf;
   };
