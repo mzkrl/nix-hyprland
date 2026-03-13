@@ -1,0 +1,207 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 36,
+    "spacing": 4,
+    "margin-top": 6,
+    "margin-left": 10,
+    "margin-right": 10,
+
+    "modules-left": [
+        "hyprland/workspaces",
+        "wlr/taskbar",
+        "mpris"
+    ],
+
+    "modules-center": [
+        "clock"
+    ],
+
+    "modules-right": [
+        "tray",
+        "power-profiles-daemon",
+        "cpu",
+        "memory",
+        "pulseaudio",
+        "network",
+        "backlight",
+        "battery",
+        "custom/power"
+    ],
+
+    // ─── Taskbar ──────────────────────────────────────────
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 18,
+        "spacing": 0,
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close"
+    },
+
+    // ─── Workspaces ───────────────────────────────────────
+    "hyprland/workspaces": {
+        "disable-scroll"  : true,
+        "all-outputs"     : true,
+        "active-only"     : false,
+        "format"          : "{icon}",
+        "format-icons": {
+            "1"  : "󰈹",
+            "2"  : "󰄛",
+            "3"  : "󰉋",
+            "4"  : "󰙯",
+            "5"  : "󰓇",
+            "urgent"  : "󱈸",
+            "focused" : "󰮯",
+            "default" : "○"
+        },
+        "persistent-workspaces": {
+            "1": [], "2": [], "3": [], "4": [], "5": []
+        }
+    },
+
+    // ─── Power Profiles ──────────────────────────────────
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+        "format-icons": {
+          "default": "󰓅",
+          "performance": "󰓅",
+          "balanced": "󰾗",
+          "power-saver": "󰾆"
+        }
+    },
+
+    // ─── MPRIS (Media Player) ─────────────────────────────
+    "mpris": {
+        "format": "{player_icon} {title}",
+        "format-paused": "{status_icon} <i>{title}</i>",
+        "player-icons": {
+            "default": "󰎆",
+            "firefox": "󰈹",
+            "spotify": "󰓇"
+        },
+        "status-icons": {
+            "paused": "󰏤"
+        },
+        "max-length": 30
+    },
+
+    // ─── Window Title ─────────────────────────────────────
+    "hyprland/window": {
+        "max-length"      : 30,
+        "separate-outputs": true,
+        "rewrite": {
+            "(.*) — Mozilla Firefox" : "󰈹  $1",
+            "(.*) - kitty"           : "󰄛  $1",
+            "(.*) - Thunar"          : "󰉋  $1",
+            "(.*) - Discord"         : "󰙯  $1",
+            "Spotify"                : "󰓇  Spotify"
+        }
+    },
+
+    // ─── CPU ──────────────────────────────────────────────
+    "cpu": {
+        "format": "󰻠 {usage}%",
+        "tooltip": true,
+        "interval": 2
+    },
+
+    // ─── Memory ───────────────────────────────────────────
+    "memory": {
+        "format": "󰍛 {percentage}%",
+        "tooltip-format": "{used:0.1f}GiB / {total:0.1f}GiB",
+        "interval": 2
+    },
+
+    // ─── Clock ────────────────────────────────────────────
+    "clock": {
+        "timezone"  : "Asia/Jakarta",
+        "format"    : "  {:%H:%M}",
+        "format-alt": "  {:%A, %d %B %Y}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+
+    // ─── Audio ────────────────────────────────────────────
+    "pulseaudio": {
+        "format"       : "{icon}  {volume}%",
+        "format-muted" : "󰝟  Muted",
+        "format-icons" : {
+            "headphone"  : "󰋋",
+            "headset"    : "󰋎",
+            "phone"      : "",
+            "portable"   : "",
+            "car"        : "",
+            "default"    : ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click"     : "pavucontrol",
+        "scroll-step"  : 5,
+        "tooltip-format": "{desc}"
+    },
+
+    // ─── Bluetooth ────────────────────────────────────────
+    "bluetooth": {
+        "format"          : "󰂯",
+        "format-connected": "󰂱  {device_alias}",
+        "format-off"      : "󰂲",
+        "tooltip-format"  : "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+        "on-click"        : "blueman-manager"
+    },
+
+    // ─── Network ──────────────────────────────────────────
+    "network": {
+        "format-wifi"         : "󰤨  {essid}",
+        "format-ethernet"     : "󰈀  Wired",
+        "format-disconnected" : "󰤭  Offline",
+        "tooltip-format-wifi" : "󰤨  {essid} ({signalStrength}%)\n  {ipaddr}",
+        "tooltip-format-ethernet": "󰈀  {ifname}\n  {ipaddr}",
+        "on-click"            : "nm-connection-editor",
+        "max-length"          : 30
+    },
+
+    // ─── Backlight ────────────────────────────────────────
+    "backlight": {
+        "device"    : "intel_backlight",
+        "format"    : "{icon}  {percent}%",
+        "format-icons": ["󰃞", "󰃟", "󰃠"],
+        "on-scroll-up"  : "brightnessctl set 5%+",
+        "on-scroll-down": "brightnessctl set 5%-"
+    },
+
+    // ─── Battery ──────────────────────────────────────────
+    "battery": {
+        "states": {
+            "good"    : 95,
+            "warning" : 30,
+            "critical": 15
+        },
+        "format"           : "{icon}  {capacity}%",
+        "format-charging"  : "󰂄  {capacity}%",
+        "format-plugged"   : "󰚥  {capacity}%",
+        "format-full"      : "󰁹  Full",
+        "format-icons"     : ["󰁺","󰁻","󰁼","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"],
+        "tooltip-format"   : "{timeTo} — {power:.1f}W"
+    },
+
+    // ─── System Tray ──────────────────────────────────────
+    "tray": {
+        "spacing"   : 8,
+        "icon-size" : 16
+    },
+
+    // ─── Custom: Lock ─────────────────────────────────────
+    "custom/lock": {
+        "format"  : "󰌾",
+        "tooltip" : false,
+        "on-click": "hyprlock"
+    },
+
+    // ─── Custom: Power Menu ───────────────────────────────
+    "custom/power": {
+        "format"  : "⏻",
+        "tooltip" : false,
+        "on-click": "bash -c '(echo \"  Shutdown\"; echo \"  Reboot\"; echo \"󰗽  Logout\"; echo \"󰤄  Suspend\") | wofi --dmenu --prompt \"Power Menu\" --width 300 --height 250 | xargs -I{} bash -c \"case {} in *Shutdown) systemctl poweroff;; *Reboot) systemctl reboot;; *Logout) hyprctl dispatch exit;; *Suspend) systemctl suspend;; esac\"'"
+    }
+}

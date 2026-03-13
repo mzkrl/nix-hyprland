@@ -1,0 +1,78 @@
+/* ==========================================
+   WOFI STYLE — Anthropic Brand Colors
+   ========================================== */
+
+* {
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+}
+
+/* ─── Window ─────────────────────────────────── */
+window {
+    background-color: rgba(20, 20, 19, 0.92);
+    border: 2px solid rgba(217, 119, 87, 0.5);
+    border-radius: 14px;
+}
+
+/* ─── Input / Search bar ─────────────────────── */
+#input {
+    background-color: rgba(232, 230, 220, 0.08);
+    border: 1px solid rgba(176, 174, 165, 0.3);
+    border-radius: 10px;
+    color: #faf9f5;
+    padding: 8px 14px;
+    margin: 10px;
+    outline: none;
+}
+
+#input:focus {
+    border-color: rgba(217, 119, 87, 0.7);
+}
+
+/* ─── Inner / Scroll area ────────────────────── */
+#inner-box {
+    margin: 0 6px 8px 6px;
+}
+
+#outer-box {
+    margin: 0;
+    padding: 0;
+}
+
+#scroll {
+    margin: 0;
+}
+
+/* ─── Entry item ─────────────────────────────── */
+#entry {
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin: 2px 4px;
+    color: #e8e6dc;
+    transition: background-color 0.15s ease;
+}
+
+#entry:selected {
+    background: linear-gradient(90deg, rgba(217, 119, 87, 0.25), rgba(106, 155, 204, 0.15));
+    color: #faf9f5;
+    outline: none;
+}
+
+#entry:hover {
+    background-color: rgba(176, 174, 165, 0.1);
+}
+
+/* ─── App name ───────────────────────────────── */
+#text {
+    color: #faf9f5;
+}
+
+#text:selected {
+    color: #faf9f5;
+}
+
+/* ─── App description (sub text) ────────────── */
+#entry > box > label:last-child {
+    color: #b0aea5;
+    font-size: 11px;
+}

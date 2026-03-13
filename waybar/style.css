@@ -1,0 +1,116 @@
+/* ==========================================
+   WAYBAR STYLE — Anthropic Brand Colors
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+* {
+    font-family: "Poppins", "JetBrainsMono Nerd Font", sans-serif;
+    font-size: 13px;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: rgba(20, 20, 19, 0.85);
+    border-bottom: 2px solid rgba(217, 119, 87, 0.4);
+    border-radius: 12px;
+    color: #faf9f5;
+}
+
+/* ─── Workspaces & Taskbar ───────────────────────── */
+#workspaces,
+#taskbar {
+    background-color: rgba(20, 20, 19, 0.6);
+    border-radius: 12px;
+    margin: 4px 4px;
+    padding: 0 4px;
+}
+
+#workspaces button,
+#taskbar button {
+    color: #b0aea5;
+    background-color: transparent;
+    padding: 4px 8px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    min-width: 28px;
+}
+
+#workspaces button:hover,
+#taskbar button:hover {
+    background-color: rgba(217, 119, 87, 0.15);
+    color: #d97757;
+}
+
+#workspaces button.active,
+#taskbar button.active {
+    background: linear-gradient(45deg, rgba(217, 119, 87, 0.3), rgba(106, 155, 204, 0.3));
+    color: #faf9f5;
+    border-bottom: 2px solid #d97757;
+}
+
+/* ─── Clock ──────────────────────────────────── */
+#clock {
+    background: linear-gradient(90deg, rgba(217, 119, 87, 0.2), rgba(106, 155, 204, 0.2));
+    color: #faf9f5;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 4px 16px;
+    margin: 4px 0;
+}
+
+/* ─── Module Pills ───────────────────────────── */
+#pulseaudio,
+#bluetooth,
+#network,
+#backlight,
+#battery,
+#cpu,
+#memory,
+#mpris,
+#tray,
+#power-profiles-daemon,
+#custom-power {
+    background-color: rgba(20, 20, 19, 0.8);
+    border-radius: 16px;
+    padding: 2px 12px;
+    margin: 4px 4px;
+    color: #e8e6dc;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(176, 174, 165, 0.1);
+}
+
+#pulseaudio:hover,
+#network:hover,
+#cpu:hover,
+#memory:hover,
+#power-profiles-daemon:hover {
+    background-color: rgba(217, 119, 87, 0.2);
+    color: #d97757;
+}
+
+/* ─── MPRIS ──────────────────────────────────── */
+#mpris {
+    background: linear-gradient(90deg, rgba(106, 155, 204, 0.15), rgba(217, 119, 87, 0.1));
+    color: #faf9f5;
+}
+
+/* ─── Colors ─────────────────────────────────── */
+#cpu { color: #d97757; }
+#memory { color: #6a9bcc; }
+#pulseaudio { color: #788c5d; }
+#battery.charging { color: #788c5d; }
+#power-profiles-daemon.performance { color: #d97757; }
+#power-profiles-daemon.balanced { color: #6a9bcc; }
+#power-profiles-daemon.power-saver { color: #788c5d; }
+
+/* ─── Animations ─────────────────────────────── */
+#battery.critical:not(.charging) {
+    animation: blink 0.5s linear infinite alternate;
+}
+
+@keyframes blink {
+    to { background-color: rgba(217, 119, 87, 0.5); }
+}
