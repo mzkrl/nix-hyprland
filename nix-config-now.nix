@@ -85,7 +85,7 @@ programs.nh = {
   enable = true;
   clean.enable = true;
   clean.extraArgs = "--keep-since 4d --keep 3";
-  flake = "/media/juang/root/home/juang/Pictures/hyprland/hyprland-claude";
+  flake = "/home/juang/Pictures/hyprland/hyprland-claude";
 };
 
 # List packages installed in system profile.
@@ -95,7 +95,6 @@ environment.systemPackages = with pkgs; [
   htop gparted baobab
   bat                   # Pengganti cat yang cakep
   # --- Utilities ---
-...
     wlr-randr             # Monitor management
     hyprpicker            # Color picker
     wev                   # Debug key events

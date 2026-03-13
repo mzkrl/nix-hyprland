@@ -9,8 +9,9 @@
 
   # Caelestia Shell Configuration
   programs.caelestia = {
-    enable = true;
-    package = inputs.caelestia-shell.packages.${pkgs.system}.with-cli;
+    enable = false;
+    package = inputs.caelestia-shell.packages.${pkgs.system}.default;
+  };
   # User specific packages
   home.packages = with pkgs; [
     # Desktop Utilities
@@ -56,8 +57,8 @@
     papirus-icon-theme
 
     # Thunar Plugins
-    xfce.thunar-archive-plugin
-    xfce.thunar-volman
+    thunar-archive-plugin
+    thunar-volman
   ];
 
   # Neovim
@@ -189,7 +190,6 @@
   };
 
   # Kitty Terminal Configuration
-  ...
 programs.kitty = {
   enable = true;
   font = {
@@ -214,11 +214,11 @@ programs.kitty = {
     cursor = "#d97757";
     cursor_text_color = "#141413";
   };
+};
 # Home File (Custom Configs)
 home.file.".config/fastfetch/config.jsonc".source = ./fastfetch_config.json;
 
 # Kitty Terminal Configuration
-...
 # Fish Shell Configuration
 programs.fish = {
   enable = true;
@@ -235,7 +235,7 @@ programs.fish = {
     cat = "bat";
     cd = "z";
     ".." = "cd ..";
-    update = "nh os switch /media/juang/root/home/juang/Pictures/hyprland/hyprland-claude";
+    update = "nh os switch /home/juang/Pictures/hyprland/hyprland-claude";
     clean = "nh clean all";
     fetch = "fastfetch --config config.jsonc";
     btop = "btop --utf-force";
@@ -275,7 +275,6 @@ services.dunst = {
 };
 
 # GTK Theme Configuration
-...
   gtk = {
     enable = true;
     theme = {
@@ -322,7 +321,6 @@ services.dunst = {
   
   # Environment Variables
   home.sessionVariables = {
-    EDITOR = "nano";
     NIXOS_OZONE_WL = "1";
     WLR_NO_HARDWARE_CURSORS = "1";
     LIBVA_DRIVER_NAME = "nvidia";
