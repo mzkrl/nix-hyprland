@@ -15,6 +15,8 @@
   # User specific packages
   home.packages = with pkgs; [
     # Desktop Utilities
+    waybar
+    networkmanagerapplet
     pavucontrol
     brightnessctl
     playerctl

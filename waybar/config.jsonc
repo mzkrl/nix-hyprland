@@ -1,6 +1,10 @@
 {
     "layer": "top",
     "position": "top",
+    "mod": "dock",
+    "exclusive": true,
+    "passthrough": false,
+    "gtk-layer-shell": true,
     "height": 36,
     "spacing": 4,
     "margin-top": 6,
@@ -172,6 +176,7 @@
 
     // ─── Battery ──────────────────────────────────────────
     "battery": {
+        "bat": "BAT1",
         "states": {
             "good"    : 95,
             "warning" : 30,

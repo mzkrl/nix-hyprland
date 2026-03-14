@@ -74,7 +74,8 @@
   hardware.enableAllFirmware = true;
   services.fstrim.enable = true;
   zramSwap.enable = true;
-  services.auto-cpufreq.enable = true;
+  services.auto-cpufreq.enable = false; # Dimatikan karena konflik sama power-profiles-daemon
+  services.power-profiles-daemon.enable = true;
   services.flatpak.enable = true;
 
   # Nix Settings
@@ -100,6 +101,13 @@ programs.nh = {
 
 # List packages installed in system profile.
 environment.systemPackages = with pkgs; [
+  (writeShellScriptBin "nvidia-offload" ''
+    export __NV_PRIME_RENDER_OFFLOAD=1
+    export __NV_PRIME_RENDER_OFFLOAD_SET_GUID=1
+    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+    export __VK_LAYER_NV_optimus=NVIDIA_only
+    exec "$@"
+  '')
   wget
   git
   htop gparted baobab
