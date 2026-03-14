@@ -101,8 +101,9 @@ programs.nh = {
 
 # List packages installed in system profile.
 environment.systemPackages = with pkgs; [
-  (writeShellScriptBin "nvidia-offload" ''
-    export __NV_PRIME_RENDER_OFFLOAD=1
+polkit_gnome
+xorg.xhost
+(writeShellScriptBin "nvidia-offload" ''    export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_SET_GUID=1
     export __GLX_VENDOR_LIBRARY_NAME=nvidia
     export __VK_LAYER_NV_optimus=NVIDIA_only
@@ -168,10 +169,17 @@ environment.systemPackages = with pkgs; [
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+    extraPortals = [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
   };
 
   security.polkit.enable = true;
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      if (subject.isInGroup("wheel")) {
+        return polkit.Result.YES;
+      }
+    });
+  '';
 
   # NVIDIA Configuration
   services.xserver.videoDrivers = [ "nvidia" ];

@@ -1,9 +1,9 @@
 /* ==========================================
-   WAYBAR STYLE — Anthropic Brand Colors (SAFE MODE)
+   WAYBAR STYLE — Anthropic Brand Colors
    ========================================== */
 
 * {
-    font-family: sans-serif;
+    font-family: sans-serif, "JetBrainsMono Nerd Font";
     font-size: 13px;
     border: none;
     border-radius: 0;
@@ -44,14 +44,14 @@ window#waybar {
 
 #workspaces button.active,
 #taskbar button.active {
-    background-color: rgba(217, 119, 87, 0.3);
+    background: linear-gradient(45deg, rgba(217, 119, 87, 0.3), rgba(106, 155, 204, 0.3));
     color: #faf9f5;
     border-bottom: 2px solid #d97757;
 }
 
 /* ─── Clock ──────────────────────────────────── */
 #clock {
-    background-color: rgba(217, 119, 87, 0.2);
+    background: linear-gradient(90deg, rgba(217, 119, 87, 0.2), rgba(106, 155, 204, 0.2));
     color: #faf9f5;
     font-weight: 600;
     border-radius: 10px;
@@ -91,7 +91,7 @@ window#waybar {
 
 /* ─── MPRIS ──────────────────────────────────── */
 #mpris {
-    background-color: rgba(106, 155, 204, 0.15);
+    background: linear-gradient(90deg, rgba(106, 155, 204, 0.15), rgba(217, 119, 87, 0.1));
     color: #faf9f5;
 }
 
@@ -103,3 +103,12 @@ window#waybar {
 #power-profiles-daemon.performance { color: #d97757; }
 #power-profiles-daemon.balanced { color: #6a9bcc; }
 #power-profiles-daemon.power-saver { color: #788c5d; }
+
+/* ─── Animations ─────────────────────────────── */
+#battery.critical:not(.charging) {
+    animation: blink 0.5s linear infinite alternate;
+}
+
+@keyframes blink {
+    to { background-color: rgba(217, 119, 87, 0.5); }
+}

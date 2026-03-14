@@ -1,15 +1,16 @@
 {
-    "layer": "top",
+    "layer": "overlay",
     "position": "top",
+    "output": "eDP-1",
     "mod": "dock",
     "exclusive": true,
     "passthrough": false,
     "gtk-layer-shell": true,
-    "height": 36,
+    "height": 40,
     "spacing": 4,
-    "margin-top": 6,
-    "margin-left": 10,
-    "margin-right": 10,
+    "margin-top": 0,
+    "margin-left": 0,
+    "margin-right": 0,
 
     "modules-left": [
         "hyprland/workspaces",
