@@ -66,7 +66,7 @@
     shell = pkgs.fish;
   };
   programs.fish.enable = true;
-
+  programs.nix-ld.enable = true;
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -109,8 +109,8 @@ environment.systemPackages = with pkgs; [
     exec "$@"
   '')
   wget
-  git
-  htop gparted baobab
+  git glab gh
+  htop gparted baobab thunar 
   bat                   # Pengganti cat yang cakep
   # --- Utilities ---
     wlr-randr             # Monitor management
