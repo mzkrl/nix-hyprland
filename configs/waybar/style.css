@@ -1,212 +1,101 @@
-/* ==========================================
- * Premium Waybar Style - Floating Island Blur
- * ========================================== */
-
-@define-color base #181926;
-@define-color mantle #1e2030;
-@define-color surface0 #363a4f;
-@define-color surface1 #494d64;
-@define-color text #cad3f5;
-@define-color subtext #a5adcb;
-@define-color accent #f5a97f;
-@define-color blue #8aadf4;
-@define-color green #a6da95;
-@define-color red #ed8796;
-@define-color yellow #eed49f;
-@define-color lavender #b7bdf8;
-@define-color mauve #c6a0f6;
+@import "colors.css";
 
 * {
-    font-family: "JetBrainsMono Nerd Font", "Poppins", sans-serif;
+    /* Anthropic typography guidelines */
+    font-family: 'Poppins', 'Lora', sans-serif;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 500;
+    border: none;
+    border-radius: 0;
     min-height: 0;
     margin: 0;
     padding: 0;
-    box-shadow: none;
-    text-shadow: none;
 }
 
 window#waybar {
-    background: transparent;
+    background-color: transparent; /* Main bar is transparent */
+    color: @text-primary;
 }
 
-/* Tooltips */
-tooltip {
-    background: rgba(30, 32, 48, 0.85); /* mantle */
-    border: 1px solid rgba(245, 169, 127, 0.3); /* accent */
+/* Glassmorphism style for all modules */
+.modules-left > widget > *,
+.modules-center > widget > *,
+.modules-right > widget > * {
+    background-color: @bg-primary;
     border-radius: 12px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-tooltip label {
-    color: @text;
-    padding: 8px;
-}
-
-/* Clear grouping pill design */
-.modules-left,
-.modules-center,
-.modules-right {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-}
-
-/* Base style for all individual floating pills */
-#custom-launcher, 
-#workspaces, 
-#taskbar, 
-#mpris,
-#clock, 
-#tray, 
-#cpu, 
-#memory, 
-#temperature, 
-#pulseaudio, 
-#network, 
-#battery, 
-#custom-notification {
-    background-color: rgba(24, 25, 38, 0.65); /* base color with alpha for blur */
-    color: @text;
-    border-radius: 18px;
-    padding: 4px 14px;
     margin: 6px 4px;
-    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.08); /* slight white glare for glass */
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    padding: 2px 12px;
+    box-shadow: 0px 4px 6px rgba(20, 20, 19, 0.4);
+    /* Frosted glass effect */
+    /* Note: Depending on Waybar version, backdrop-filter might need specific config */
 }
 
-/* Add inner spacing adjustments */
-#workspaces { padding: 4px 8px; }
-#taskbar { padding: 4px 8px; }
-#tray { padding: 4px 12px; }
+/* Specific module styling */
 
-/* Universal Hover Effect for Pills */
-#custom-launcher:hover, 
-#workspaces:hover, 
-#taskbar:hover, 
-#mpris:hover,
-#clock:hover, 
-#tray:hover, 
-#cpu:hover, 
-#memory:hover, 
-#temperature:hover, 
-#pulseaudio:hover, 
-#network:hover, 
-#battery:hover, 
-#custom-notification:hover {
-    background-color: rgba(54, 58, 79, 0.85); /* surface0 */
-    border: 1px solid rgba(245, 169, 127, 0.3); /* accent border */
-    box-shadow: 0px 4px 12px rgba(245, 169, 127, 0.15); /* glowing shadow */
-}
-
-/* Launcher */
-#custom-launcher {
-    color: @blue;
-    font-size: 18px;
-    padding-right: 18px;
-    padding-left: 14px;
-}
-#custom-launcher:hover {
-    color: @accent;
-    text-shadow: 0px 0px 10px rgba(245, 169, 127, 0.6);
-}
-
-/* Workspaces */
 #workspaces button {
-    color: @subtext;
-    border-radius: 14px;
-    padding: 2px 8px;
-    margin: 0 4px;
-    transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.68);
-}
-
-#workspaces button.active {
-    color: @base;
-    background-color: @blue;
-    min-width: 36px;
-    box-shadow: 0px 0px 10px rgba(138, 173, 244, 0.7);
-}
-
-#workspaces button:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    color: @text;
-}
-
-#workspaces button.urgent {
-    color: @base;
-    background-color: @red;
-    box-shadow: 0px 0px 10px rgba(237, 135, 150, 0.7);
-}
-
-/* Taskbar (Window List) */
-#taskbar button {
-    background-color: transparent;
+    padding: 0 4px;
+    color: @anthropic-mid-gray;
+    background: transparent;
     border-radius: 12px;
-    padding: 2px 6px;
-    margin: 0 2px;
     transition: all 0.3s ease;
 }
 
-#taskbar button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+#workspaces button:hover {
+    color: @anthropic-light;
+    background-color: @bg-hover;
+    box-shadow: inherit;
+    text-shadow: inherit;
 }
 
-#taskbar button.active {
-    background-color: rgba(255, 255, 255, 0.15);
-    box-shadow: inset 0 -3px 0 @accent;
-    border-radius: 12px 12px 4px 4px;
+#workspaces button.active {
+    color: @anthropic-orange;
+    font-weight: 700;
 }
 
-/* MPRIS */
-#mpris {
-    color: @mauve;
-    font-weight: 800;
+#workspaces button.urgent {
+    color: @anthropic-light;
+    background-color: @anthropic-orange;
 }
 
-/* Clock */
+/* Accents for different modules */
 #clock {
-    color: @accent;
-    font-weight: 800;
+    color: @anthropic-blue;
+    font-weight: 600;
 }
 
-/* Hardware & System Info Colors */
-#pulseaudio { color: @green; }
-#network { color: @lavender; }
-#battery { color: @yellow; }
-#cpu { color: @accent; }
-#memory { color: @blue; }
-#temperature { color: @red; }
-#custom-notification { color: @accent; padding: 4px 18px; }
-
-/* Tray Icons Space */
-#tray > .passive {
-    -gtk-icon-effect: dim;
-}
-#tray > .needs-attention {
-    -gtk-icon-effect: highlight;
-    background-color: @red;
+#battery {
+    color: @anthropic-green;
 }
 
-/* Module States */
-#battery.charging, #battery.plugged {
-    color: @green;
+#battery.warning {
+    color: @anthropic-orange;
 }
-#battery.warning:not(.charging) {
-    color: @accent;
-}
-#battery.critical:not(.charging) {
-    color: @base;
-    background-color: @red;
-    animation: blink 2s steps(2, start) infinite;
-    box-shadow: 0px 0px 10px rgba(237, 135, 150, 0.8);
+
+#battery.critical {
+    color: @anthropic-light;
+    background-color: @anthropic-orange;
+    animation: blink 1s step-end infinite;
 }
 
 @keyframes blink {
-    to {
-        background-color: transparent;
-        color: @red;
-        box-shadow: none;
-    }
+    50% { color: @anthropic-orange; background-color: transparent; }
+}
+
+#pulseaudio,
+#network,
+#cpu,
+#memory,
+#temperature,
+#custom-media,
+#tray,
+#idle_inhibitor {
+    color: @anthropic-light;
+}
+
+/* Hover effects */
+#pulseaudio:hover,
+#network:hover,
+#battery:hover {
+    background-color: @bg-hover;
+    color: @anthropic-orange;
 }
