@@ -266,9 +266,6 @@ programs.fish = {
   enable = true;
   interactiveShellInit = ''
     set fish_greeting # Matikan greeting default
-    starship init fish | source
-    zoxide init fish | source
-    direnv hook fish | source
   '';
   shellAliases = {
     ls = "eza --icons --group-directories-first";
