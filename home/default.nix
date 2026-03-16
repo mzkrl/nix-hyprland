@@ -41,7 +41,7 @@
     bat                   # cat with wings
 
     # Apps
-    firefox
+    firefox antigravity
     discord
 
     # Dev & Terminal
@@ -241,6 +241,12 @@ home.file.".config/swaync/style.css".source = ../configs/swaync/style.css;
 # Fastfetch
 home.file.".config/fastfetch/config.jsonc".source = ../configs/fastfetch/config.jsonc;
 
+# Power Profile Script
+home.file.".local/bin/power-profile" = {
+  source = ../scripts/power-profile.sh;
+  executable = true;
+};
+
 # Fuzzel App Launcher Config
 home.file.".config/fuzzel/fuzzel.ini".text = ''
   [main]
@@ -285,6 +291,11 @@ programs.fish = {
     clean = "nh clean all";
     fetch = "fastfetch --config config.jsonc";
     btop = "btop --utf-force";
+    # Power profiles
+    power = "~/.local/bin/power-profile";
+    performa = "~/.local/bin/power-profile set performa";
+    hemat = "~/.local/bin/power-profile set hemat";
+    "ultra-hemat" = "~/.local/bin/power-profile set ultra-hemat";
   };
 };
 

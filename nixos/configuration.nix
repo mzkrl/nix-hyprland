@@ -221,6 +221,14 @@ environment.systemPackages = with pkgs; [
         return polkit.Result.YES;
       }
     });
+    polkit.addRule(function(action, subject) {
+      if (action.id == "org.freedesktop.login1.set-wall-message" ||
+          action.id.indexOf("org.freedesktop.udisks2.") == 0) {
+        if (subject.isInGroup("wheel")) {
+          return polkit.Result.YES;
+        }
+      }
+    });
   '';
 
   # NVIDIA Configuration
@@ -233,7 +241,7 @@ environment.systemPackages = with pkgs; [
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = true;
-    powerManagement.finegrained = false;
+    powerManagement.finegrained = true;
     open = false;
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;

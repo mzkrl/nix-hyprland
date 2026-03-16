@@ -31,6 +31,7 @@
         "pulseaudio",
         "network",
         "battery",
+        "custom/power-profile",
         "custom/notification"
     ],
 
@@ -199,5 +200,14 @@
         "on-click": "swaync-client -t -sw",
         "on-click-right": "swaync-client -d -sw",
         "escape": true
+    },
+
+    "custom/power-profile": {
+        "exec": "~/.local/bin/power-profile waybar",
+        "return-type": "json",
+        "interval": 5,
+        "on-click": "~/.local/bin/power-profile cycle",
+        "on-click-right": "~/.local/bin/power-profile menu",
+        "tooltip": true
     }
 }

@@ -100,3 +100,31 @@ window#waybar {
     background-color: @bg-hover;
     color: @anthropic-orange;
 }
+
+/* Power Profile Module */
+#custom-power-profile {
+    font-size: 16px;
+    padding: 4px 14px;
+    transition: all 0.3s ease;
+}
+
+#custom-power-profile.performance {
+    color: @anthropic-orange;
+}
+
+#custom-power-profile.balanced {
+    color: @anthropic-blue;
+}
+
+#custom-power-profile.powersaver {
+    color: @anthropic-green;
+}
+
+#custom-power-profile.ultrasaver {
+    color: @anthropic-light;
+    background-color: rgba(217, 119, 87, 0.15);
+}
+
+#custom-power-profile:hover {
+    background-color: @bg-hover;
+}
