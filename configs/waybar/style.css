@@ -1,21 +1,28 @@
 /* ==========================================
- * Premium Waybar Style (HyDE / Anthropic Inspired)
+ * Premium Waybar Style (Catppuccin Macchiato Inspired / Anthropic)
  * ========================================== */
 
-@define-color base #141413;
-@define-color mantle #1e1e1e;
-@define-color text #faf9f5;
-@define-color subtext #b0aea5;
-@define-color accent #d97757;
-@define-color blue #6a9bcc;
-@define-color green #788c5d;
-@define-color red #e06c75;
+@define-color base #181926;
+@define-color mantle #1e2030;
+@define-color surface0 #363a4f;
+@define-color surface1 #494d64;
+@define-color text #cad3f5;
+@define-color subtext #a5adcb;
+@define-color accent #f5a97f;
+@define-color blue #8aadf4;
+@define-color green #a6da95;
+@define-color red #ed8796;
+@define-color yellow #eed49f;
 
 * {
     font-family: "JetBrainsMono Nerd Font", "Poppins", sans-serif;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 700;
     min-height: 0;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    text-shadow: none;
 }
 
 window#waybar {
@@ -25,115 +32,170 @@ window#waybar {
 /* Tooltips */
 tooltip {
     background: @mantle;
-    border: 2px solid @accent;
+    border: 2px solid @surface0;
     border-radius: 12px;
 }
 
 tooltip label {
     color: @text;
-    padding: 6px;
+    padding: 8px;
 }
 
-/* Modules generic */
-.modules-left>widget>button,
-.modules-left>widget>label,
-.modules-left>widget>box,
-.modules-center>widget>button,
-.modules-center>widget>label,
-.modules-center>widget>box,
-.modules-right>widget>button,
-.modules-right>widget>label,
-.modules-right>widget>box {
+/* Pill Design for Groups */
+.modules-left,
+.modules-center,
+.modules-right {
     background-color: @base;
     color: @text;
     border-radius: 20px;
     padding: 2px 14px;
-    margin: 4px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(217, 119, 87, 0.2);
+    margin: 6px 0px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Add a bit of gap between the pill sections themselves */
+.modules-left {
+    margin-right: 6px;
+}
+.modules-right {
+    margin-left: 6px;
+}
+
+/* Widgets inside Pills */
+.modules-left > widget > button,
+.modules-left > widget > label,
+.modules-left > widget > box,
+.modules-center > widget > button,
+.modules-center > widget > label,
+.modules-center > widget > box,
+.modules-right > widget > button,
+.modules-right > widget > label,
+.modules-right > widget > box {
+    padding: 4px 10px;
+    margin: 2px;
+    border-radius: 14px;
+    transition: all 0.2s cubic-bezier(0.55, -0.68, 0.48, 1.68);
+}
+
+.modules-left > widget > box > button,
+.modules-center > widget > box > button,
+.modules-right > widget > box > button {
+    padding: 4px 10px;
+    margin: 2px;
+    border-radius: 14px;
+    transition: all 0.2s cubic-bezier(0.55, -0.68, 0.48, 1.68);
 }
 
 /* Launcher */
 #custom-launcher {
     color: @blue;
-    font-size: 20px;
-    padding-right: 18px;
-    padding-left: 14px;
+    font-size: 22px;
+    padding-right: 12px;
+    padding-left: 4px;
 }
-
 #custom-launcher:hover {
     color: @accent;
+    text-shadow: 0px 0px 5px rgba(245, 169, 127, 0.5);
 }
 
 /* Workspaces */
 #workspaces {
-    padding: 0 4px;
+    padding: 0;
+    margin: 0;
 }
 
 #workspaces button {
     color: @subtext;
-    border-radius: 50%;
-    padding: 0;
-    margin: 4px 2px;
-    min-width: 28px;
-    transition: all 0.2s cubic-bezier(0.55, -0.68, 0.48, 1.68);
+    border-radius: 14px;
+    padding: 2px 8px;
+    margin: 0 2px;
+    transition: all 0.3s ease;
 }
 
 #workspaces button.active {
     color: @base;
-    background-color: @accent;
-    min-width: 40px;
-    border-radius: 20px;
+    background-color: @blue;
+    min-width: 32px;
+    box-shadow: 0px 0px 8px rgba(138, 173, 244, 0.6);
 }
 
 #workspaces button:hover {
-    background-color: rgba(217, 119, 87, 0.3);
+    background-color: @surface0;
     color: @text;
-}
-
-/* Clock */
-#clock {
-    color: @text;
-    font-weight: 700;
 }
 
 /* Taskbar (Window List) */
 #taskbar {
-    padding: 0 4px;
+    padding: 0;
+    margin: 0 8px;
 }
 
 #taskbar button {
     background-color: transparent;
-    border-radius: 8px;
-    padding: 4px 8px;
-    margin: 2px 4px;
+    border-radius: 10px;
+    padding: 4px;
+    margin: 0 2px;
     transition: all 0.2s ease;
-    border-bottom: 2px solid transparent;
 }
 
 #taskbar button:hover {
-    background-color: rgba(217, 119, 87, 0.2);
-    border-bottom: 2px solid rgba(217, 119, 87, 0.5);
+    background-color: @surface0;
 }
 
 #taskbar button.active {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-bottom: 2px solid @accent;
-    border-radius: 8px 8px 0 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 -3px 0 @accent;
+    border-radius: 10px 10px 4px 4px;
+}
+
+/* Clock */
+#clock {
+    color: @accent;
+    font-weight: 800;
+}
+#clock:hover {
+    background-color: @surface0;
+    border-radius: 14px;
 }
 
 /* Hardware & System Info */
-#pulseaudio,
-#network,
-#battery,
-#tray {
-    color: @text;
+#pulseaudio {
+    color: @green;
 }
-
+#network {
+    color: @blue;
+}
+#battery {
+    color: @yellow;
+}
+#cpu {
+    color: @accent;
+}
+#memory {
+    color: @blue;
+}
+#temperature {
+    color: @red;
+}
+#tray {
+    padding-right: 8px;
+    padding-left: 8px;
+}
 #custom-notification {
     color: @accent;
-    font-size: 16px;
-    padding: 0 16px;
+    padding-right: 4px;
+}
+
+#pulseaudio:hover,
+#network:hover,
+#battery:hover,
+#cpu:hover,
+#memory:hover,
+#temperature:hover,
+#custom-notification:hover {
+    background-color: @surface0;
+    border-radius: 14px;
 }
 
 /* Module States */
@@ -143,7 +205,7 @@ tooltip label {
 
 #battery.critical {
     color: @red;
-    animation: blink 1s steps(2, start) infinite;
+    animation: blink 2s steps(2, start) infinite;
 }
 
 @keyframes blink {

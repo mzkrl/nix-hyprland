@@ -1,35 +1,46 @@
 {
     "layer": "top",
-    "position": "bottom",
+    "position": "top",
+    "margin-top": 8,
     "margin-bottom": 0,
-    "margin-left": 0,
-    "margin-right": 0,
-    "margin-top": 0,
-    "height": 44,
+    "margin-left": 12,
+    "margin-right": 12,
+    "height": 40,
     "spacing": 8,
     "exclusive": true,
+
     // Modules Left
     "modules-left": [
         "custom/launcher",
+        "hyprland/workspaces",
         "wlr/taskbar"
     ],
+
     // Modules Center
     "modules-center": [
         "clock"
     ],
+
     // Modules Right
     "modules-right": [
+        "tray",
+        "cpu",
+        "memory",
+        "temperature",
         "pulseaudio",
         "network",
         "battery",
         "custom/notification"
     ],
+
     // --- Module Configurations ---
+
     "custom/launcher": {
-        "format": "󱓞",
+        "format": " ",
         "on-click": "wofi --show drun",
         "tooltip": false
     },
+
     "hyprland/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
@@ -46,6 +57,7 @@
             "default": "󰊠"
         }
     },
+
     "wlr/taskbar": {
         "format": "{icon}",
         "icon-size": 22,
@@ -64,6 +76,7 @@
             "Foot Server": "Terminal"
         }
     },
+
     "clock": {
         "format": "  {:%I:%M %p}",
         "format-alt": "  {:%A, %B %d, %Y}",
@@ -82,10 +95,12 @@
             }
         }
     },
+
     "tray": {
         "icon-size": 18,
         "spacing": 10
     },
+
     "pulseaudio": {
         "format": "{icon} {volume}%",
         "format-bluetooth": "{icon} {volume}%",
@@ -105,6 +120,7 @@
         },
         "on-click": "pavucontrol"
     },
+
     "network": {
         "format-wifi": "  {signalStrength}%",
         "format-ethernet": "󰈀  Wired",
@@ -113,6 +129,7 @@
         "tooltip-format": "{essid} ({signalStrength}%)",
         "on-click": "nm-connection-editor"
     },
+
     "battery": {
         "states": {
             "good": 95,
@@ -131,6 +148,22 @@
             ""
         ]
     },
+
+    "cpu": {
+        "format": "  {usage}%",
+        "tooltip": false
+    },
+
+    "memory": {
+        "format": "  {}%"
+    },
+
+    "temperature": {
+        "critical-threshold": 80,
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", "", "", ""]
+    },
+
     "custom/notification": {
         "tooltip": false,
         "format": "{icon}",
