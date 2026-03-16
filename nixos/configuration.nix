@@ -112,7 +112,7 @@ environment.systemPackages = with pkgs; [
   '')
   wget
   git glab gh antigravity
-  htop gparted baobab thunar brave
+  htop gparted baobab thunar brave killall
   bat                   # Pengganti cat yang cakep
 
   # --- Utilities ---

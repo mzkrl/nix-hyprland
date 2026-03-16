@@ -22,9 +22,9 @@ window#waybar {
 .modules-center > widget > *,
 .modules-right > widget > * {
     background-color: @bg-primary;
-    border-radius: 12px;
-    margin: 6px 4px;
-    padding: 2px 12px;
+    border-radius: 16px;
+    margin: 6px 8px;
+    padding: 4px 16px;
     box-shadow: 0px 4px 6px rgba(20, 20, 19, 0.4);
     /* Frosted glass effect */
     /* Note: Depending on Waybar version, backdrop-filter might need specific config */
@@ -33,7 +33,8 @@ window#waybar {
 /* Specific module styling */
 
 #workspaces button {
-    padding: 0 4px;
+    padding: 2px 8px;
+    margin: 0 4px;
     color: @anthropic-mid-gray;
     background: transparent;
     border-radius: 12px;
