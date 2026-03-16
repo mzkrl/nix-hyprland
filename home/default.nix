@@ -1,21 +1,21 @@
-{ inputs, pkgs, config, ... }: {
-  imports = [
-    inputs.caelestia-shell.homeManagerModules.default
-  ];
+{ inputs, pkgs, lib, config, ... }: {
+  # imports = [
+  #   inputs.caelestia-shell.homeManagerModules.default
+  # ];
 
   home.username = "juang";
   home.homeDirectory = "/home/juang";
   home.stateVersion = "25.11";
 
-  # Caelestia Shell Configuration
-  programs.caelestia = {
-    enable = false;
-    package = inputs.caelestia-shell.packages.${pkgs.system}.default;
-  };
+  # Caelestia Shell Configuration (DISABLED - BROKEN)
+  # programs.caelestia = {
+  #   enable = true;
+  #   package = inputs.caelestia-shell.packages.${pkgs.system}.default;
+  # };
   # User specific packages
   home.packages = with pkgs; [
     # Desktop Utilities
-    waybar
+    waybar                # Fallback panel (backup)
     networkmanagerapplet
     pavucontrol
     brightnessctl
@@ -217,8 +217,55 @@ programs.kitty = {
     cursor_text_color = "#141413";
   };
 };
-# Home File (Custom Configs)
-home.file.".config/fastfetch/config.jsonc".source = ./fastfetch_config.json;
+# ─── Home File (Deploy dotfiles) ──────────────────
+# Hyprpaper — wallpaper config
+home.file.".config/hypr/hyprpaper.conf".source = ../configs/hypr/hyprpaper.conf;
+
+# Waybar — fallback panel
+home.file.".config/waybar/config".source = ../configs/waybar/config.jsonc;
+home.file.".config/waybar/style.css".source = ../configs/waybar/style.css;
+
+# Fastfetch
+home.file.".config/fastfetch/config.jsonc".source = ../configs/fastfetch/config.jsonc;
+
+# Fuzzel App Launcher Config
+home.file.".config/fuzzel/fuzzel.ini".text = ''
+  [main]
+  font=JetBrainsMono Nerd Font:size=11
+  icon-theme=Papirus-Dark
+  terminal=kitty
+  lines=10
+  width=35
+  horizontal-pad=12
+  vertical-pad=8
+  inner-pad=4
+
+  [colors]
+  background=141413ff
+  text=faf9f5ff
+  match=d97757ff
+  selection=d9775722
+  selection-text=faf9f5ff
+  selection-match=d97757ff
+  border=d97757ff
+
+  [border]
+  width=2
+  radius=10
+'';
+
+# Auto-clone cartoon-shell on first activation
+home.activation.cloneCartoonShell = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  CARTOON_SHELL_DIR="$HOME/.config/quickshell/cartoon-shell"
+  if [ ! -d "$CARTOON_SHELL_DIR" ]; then
+    $DRY_RUN_CMD ${pkgs.git}/bin/git clone \
+      https://github.com/mailong2401/cartoon-shell.git \
+      "$CARTOON_SHELL_DIR"
+    echo "cartoon-shell cloned to $CARTOON_SHELL_DIR"
+  else
+    echo "cartoon-shell already exists at $CARTOON_SHELL_DIR, skipping clone."
+  fi
+'';
 
 # Kitty Terminal Configuration
 # Fish Shell Configuration
@@ -315,11 +362,11 @@ services.dunst = {
     #   inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
     # ];
     
-    extraConfig = builtins.readFile ./hypr/hyprland.conf;
+    extraConfig = builtins.readFile ../configs/hypr/hyprland.conf;
   };
 
-  # Kitty, Waybar, etc. (untuk sekarang kita pakai file external aja)
-  # Tapi ke depan bisa didefinisikan di sini juga
+  # Firefox
+  programs.firefox.enable = true;
   
   # Environment Variables
   home.sessionVariables = {

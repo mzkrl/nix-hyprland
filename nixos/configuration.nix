@@ -101,30 +101,45 @@ programs.nh = {
 
 # List packages installed in system profile.
 environment.systemPackages = with pkgs; [
-polkit_gnome
-xorg.xhost
-(writeShellScriptBin "nvidia-offload" ''    export __NV_PRIME_RENDER_OFFLOAD=1
+  polkit_gnome
+  xhost
+  (writeShellScriptBin "nvidia-offload" ''
+    export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_SET_GUID=1
     export __GLX_VENDOR_LIBRARY_NAME=nvidia
     export __VK_LAYER_NV_optimus=NVIDIA_only
     exec "$@"
   '')
   wget
-  git glab gh
-  htop gparted baobab thunar 
+  git glab gh antigravity
+  htop gparted baobab thunar
   bat                   # Pengganti cat yang cakep
+
   # --- Utilities ---
-    wlr-randr             # Monitor management
-    hyprpicker            # Color picker
-    wev                   # Debug key events
-    pciutils              # Buat cek lspci
-    tuigreet              # Login manager
-  ];
+  wlr-randr             # Monitor management
+  hyprpicker            # Color picker
+  wev                   # Debug key events
+  pciutils              # Buat cek lspci
+  tuigreet              # Login manager
+
+  # --- cartoon-shell / QuickShell Dependencies ---
+  quickshell            # QuickShell panel framework
+  cava                  # Audio visualizer (music widget)
+  mpvpaper              # Video wallpaper
+  ffmpeg                # Video thumbnail generation
+  jq                    # JSON processing (cartoon-shell scripts)
+  curl                  # API calls
+  python3               # cartoon-shell scripts
+  iproute2              # `ip` command (network info)
+  procps                # `top`, `free` (system info)
+  fuzzel                # App launcher (pengganti wofi)
+];
 
   # Fonts configuration
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
     nerd-fonts.symbols-only
+    nerd-fonts.comic-shanns-mono  # Icon font untuk cartoon-shell
     poppins
     noto-fonts
     noto-fonts-color-emoji
