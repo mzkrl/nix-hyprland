@@ -124,6 +124,9 @@ environment.systemPackages = with pkgs; [
 
   # --- cartoon-shell / QuickShell Dependencies ---
   quickshell            # QuickShell panel framework
+  qt6.qtmultimedia      # Required by QuickShell for Background module
+  qt6.qtdeclarative
+  qt6.qtwayland
   cava                  # Audio visualizer (music widget)
   mpvpaper              # Video wallpaper
   ffmpeg                # Video thumbnail generation

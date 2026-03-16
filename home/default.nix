@@ -15,6 +15,8 @@
   # User specific packages
   home.packages = with pkgs; [
     # Desktop Utilities
+    hyprpaper              # Wallpaper daemon
+    hypridle               # Idle daemon
     waybar                # Fallback panel (backup)
     networkmanagerapplet
     pavucontrol
