@@ -134,6 +134,23 @@ environment.systemPackages = with pkgs; [
   iproute2              # `ip` command (network info)
   procps                # `top`, `free` (system info)
   fuzzel                # App launcher (pengganti wofi)
+
+  # --- Desktop / Ricing ---
+  waybar                # Bar / Taskbar
+  kitty                 # Terminal
+  libnotify             # notify-send
+  grim                  # Screenshot
+  slurp                 # Area-select for screenshot
+  swappy                # Screenshot editor
+
+  # --- Audio ---
+  pavucontrol           # PulseAudio Volume Control
+  brightnessctl         # Brightness
+  playerctl             # Media controls
+
+  # --- Clipboard ---
+  wl-clipboard
+  cliphist
 ];
 
   # Fonts configuration
@@ -151,6 +168,15 @@ environment.systemPackages = with pkgs; [
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
+  };
+
+  # Wayland Environment Variables
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    WLR_NO_HARDWARE_CURSORS = "1";
+    LIBVA_DRIVER_NAME = "nvidia";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    GBM_BACKEND = "nvidia-drm";
   };
 
   # Services
