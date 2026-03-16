@@ -11,8 +11,7 @@
     // Modules Left
     "modules-left": [
         "custom/launcher",
-        "hyprland/workspaces",
-        "hyprland/window"
+        "wlr/taskbar"
     ],
     // Modules Center
     "modules-center": [
@@ -20,11 +19,9 @@
     ],
     // Modules Right
     "modules-right": [
-        "tray",
         "pulseaudio",
         "network",
         "battery",
-        "clock",
         "custom/notification"
     ],
     // --- Module Configurations ---
@@ -47,9 +44,6 @@
             "urgent": "",
             "active": "󰮯",
             "default": "󰊠"
-        },
-        "persistent-workspaces": {
-            "*": 5
         }
     },
     "wlr/taskbar": {

@@ -112,7 +112,7 @@ environment.systemPackages = with pkgs; [
   '')
   wget
   git glab gh antigravity
-  htop gparted baobab thunar
+  htop gparted baobab thunar brave
   bat                   # Pengganti cat yang cakep
 
   # --- Utilities ---
@@ -121,6 +121,7 @@ environment.systemPackages = with pkgs; [
   wev                   # Debug key events
   pciutils              # Buat cek lspci
   tuigreet              # Login manager
+  starship
 
   # --- Ricing Dependencies ---
   swaynotificationcenter # SwayNC Notification & Control Center

@@ -36,7 +36,10 @@
 
     # 2. Standalone Home Manager Configuration (nh home switch)
     homeConfigurations."juang@nixos" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages."x86_64-linux";
+      pkgs = import nixpkgs {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
       extraSpecialArgs = { inherit inputs; };
       modules = [
         ./home/default.nix
