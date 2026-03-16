@@ -1,114 +1,121 @@
 /* ==========================================
-   WAYBAR STYLE — Anthropic Brand Colors
-   ========================================== */
+ * Premium Waybar Style (HyDE / Anthropic Inspired)
+ * ========================================== */
+
+@define-color base   #141413; /* Very dark background */
+@define-color mantle #1e1e1e; /* Slightly lighter */
+@define-color text   #faf9f5;
+@define-color subtext #b0aea5;
+@define-color accent #d97757; /* Orange emphasis */
+@define-color blue   #6a9bcc;
+@define-color green  #788c5d;
+@define-color red    #e06c75;
 
 * {
-    font-family: sans-serif, "JetBrainsMono Nerd Font";
-    font-size: 13px;
-    border: none;
-    border-radius: 0;
+    font-family: "JetBrainsMono Nerd Font", "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
     min-height: 0;
 }
 
 window#waybar {
-    background-color: rgba(20, 20, 19, 0.85);
-    border-bottom: 2px solid rgba(217, 119, 87, 0.4);
-    border-radius: 12px;
-    color: #faf9f5;
+    background: transparent;
 }
 
-/* ─── Workspaces & Taskbar ───────────────────────── */
-#workspaces,
-#taskbar {
-    background-color: rgba(20, 20, 19, 0.6);
+/* Tooltips */
+tooltip {
+    background: @mantle;
+    border: 2px solid @accent;
     border-radius: 12px;
-    margin: 4px 4px;
+}
+tooltip label {
+    color: @text;
+    padding: 6px;
+}
+
+/* Modules generic */
+.modules-left > widget > button,
+.modules-left > widget > label,
+.modules-left > widget > box,
+.modules-center > widget > button,
+.modules-center > widget > label,
+.modules-center > widget > box,
+.modules-right > widget > button,
+.modules-right > widget > label,
+.modules-right > widget > box {
+    background-color: @base;
+    color: @text;
+    border-radius: 20px;
+    padding: 4px 14px;
+    margin: 4px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(217, 119, 87, 0.2);
+}
+
+/* Launcher */
+#custom-launcher {
+    color: @blue;
+    font-size: 18px;
+    padding-right: 18px;
+    padding-left: 14px;
+}
+#custom-launcher:hover {
+    color: @accent;
+}
+
+/* Workspaces */
+#workspaces {
     padding: 0 4px;
 }
-
-#workspaces button,
-#taskbar button {
-    color: #b0aea5;
-    background-color: transparent;
-    padding: 4px 8px;
-    border-radius: 10px;
-    transition: all 0.2s ease;
+#workspaces button {
+    color: @subtext;
+    border-radius: 50%;
+    padding: 0;
+    margin: 4px 2px;
     min-width: 28px;
+    transition: all 0.2s cubic-bezier(0.55, -0.68, 0.48, 1.68);
+}
+#workspaces button.active {
+    color: @base;
+    background-color: @accent;
+    min-width: 40px;
+    border-radius: 20px;
+}
+#workspaces button:hover {
+    background-color: rgba(217, 119, 87, 0.3);
+    color: @text;
 }
 
-#workspaces button:hover,
-#taskbar button:hover {
-    background-color: rgba(217, 119, 87, 0.15);
-    color: #d97757;
-}
-
-#workspaces button.active,
-#taskbar button.active {
-    background: linear-gradient(45deg, rgba(217, 119, 87, 0.3), rgba(106, 155, 204, 0.3));
-    color: #faf9f5;
-    border-bottom: 2px solid #d97757;
-}
-
-/* ─── Clock ──────────────────────────────────── */
+/* Clock */
 #clock {
-    background: linear-gradient(90deg, rgba(217, 119, 87, 0.2), rgba(106, 155, 204, 0.2));
-    color: #faf9f5;
-    font-weight: 600;
-    border-radius: 10px;
-    padding: 4px 16px;
-    margin: 4px 0;
+    color: @text;
+    font-weight: 700;
+    background-color: @base;
+    border: 2px solid @accent;
 }
 
-/* ─── Module Pills ───────────────────────────── */
+/* Hardware & System Info */
 #pulseaudio,
-#bluetooth,
 #network,
-#backlight,
 #battery,
-#cpu,
-#memory,
-#mpris,
-#tray,
-#power-profiles-daemon,
-#custom-power {
-    background-color: rgba(20, 20, 19, 0.8);
-    border-radius: 16px;
-    padding: 2px 12px;
-    margin: 4px 4px;
-    color: #e8e6dc;
-    transition: all 0.2s ease;
-    border: 1px solid rgba(176, 174, 165, 0.1);
+#tray {
+    color: @text;
+}
+#custom-notification {
+    color: @accent;
+    font-size: 16px;
+    padding: 0 16px;
 }
 
-#pulseaudio:hover,
-#network:hover,
-#cpu:hover,
-#memory:hover,
-#power-profiles-daemon:hover {
-    background-color: rgba(217, 119, 87, 0.2);
-    color: #d97757;
+/* Module States */
+#battery.warning {
+    color: @accent;
 }
-
-/* ─── MPRIS ──────────────────────────────────── */
-#mpris {
-    background: linear-gradient(90deg, rgba(106, 155, 204, 0.15), rgba(217, 119, 87, 0.1));
-    color: #faf9f5;
-}
-
-/* ─── Colors ─────────────────────────────────── */
-#cpu { color: #d97757; }
-#memory { color: #6a9bcc; }
-#pulseaudio { color: #788c5d; }
-#battery.charging { color: #788c5d; }
-#power-profiles-daemon.performance { color: #d97757; }
-#power-profiles-daemon.balanced { color: #6a9bcc; }
-#power-profiles-daemon.power-saver { color: #788c5d; }
-
-/* ─── Animations ─────────────────────────────── */
-#battery.critical:not(.charging) {
-    animation: blink 0.5s linear infinite alternate;
+#battery.critical {
+    color: @red;
+    animation: blink 1s steps(2, start) infinite;
 }
 
 @keyframes blink {
-    to { background-color: rgba(217, 119, 87, 0.5); }
+    to { background-color: @red; color: @base; }
 }

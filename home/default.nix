@@ -224,8 +224,12 @@ programs.kitty = {
 home.file.".config/hypr/hyprpaper.conf".source = ../configs/hypr/hyprpaper.conf;
 
 # Waybar — fallback panel
-home.file.".config/waybar/config".source = ../configs/waybar/config.jsonc;
+home.file.".config/waybar/config.jsonc".source = ../configs/waybar/config.jsonc;
 home.file.".config/waybar/style.css".source = ../configs/waybar/style.css;
+
+# SwayNC — Control Center
+home.file.".config/swaync/config.json".source = ../configs/swaync/config.json;
+home.file.".config/swaync/style.css".source = ../configs/swaync/style.css;
 
 # Fastfetch
 home.file.".config/fastfetch/config.jsonc".source = ../configs/fastfetch/config.jsonc;
@@ -256,19 +260,6 @@ home.file.".config/fuzzel/fuzzel.ini".text = ''
   radius=10
 '';
 
-# Auto-clone cartoon-shell on first activation
-home.activation.cloneCartoonShell = lib.hm.dag.entryAfter ["writeBoundary"] ''
-  CARTOON_SHELL_DIR="$HOME/.config/quickshell/cartoon-shell"
-  if [ ! -d "$CARTOON_SHELL_DIR" ]; then
-    $DRY_RUN_CMD ${pkgs.git}/bin/git clone \
-      https://github.com/mailong2401/cartoon-shell.git \
-      "$CARTOON_SHELL_DIR"
-    echo "cartoon-shell cloned to $CARTOON_SHELL_DIR"
-  else
-    echo "cartoon-shell already exists at $CARTOON_SHELL_DIR, skipping clone."
-  fi
-'';
-
 # Kitty Terminal Configuration
 # Fish Shell Configuration
 programs.fish = {
@@ -293,37 +284,6 @@ programs.fish = {
   };
 };
 
-# Dunst Configuration
-services.dunst = {
-  enable = true;
-  settings = {
-    global = {
-      width = 320;
-      height = 200;
-      origin = "top-right";
-      offset = "12x48";
-      frame_width = 2;
-      frame_color = "#d97757";
-      corner_radius = 10;
-      font = "Poppins 11";
-      background = "#141413";
-      foreground = "#faf9f5";
-    };
-    urgency_low = {
-      background = "#141413";
-      foreground = "#b0aea5";
-    };
-    urgency_normal = {
-      background = "#141413";
-      foreground = "#faf9f5";
-    };
-    urgency_critical = {
-      background = "#1a0e0a";
-      foreground = "#faf9f5";
-      frame_color = "#d97757";
-    };
-  };
-};
 
 # GTK Theme Configuration
   gtk = {

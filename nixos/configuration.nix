@@ -122,13 +122,10 @@ environment.systemPackages = with pkgs; [
   pciutils              # Buat cek lspci
   tuigreet              # Login manager
 
-  # --- cartoon-shell / QuickShell Dependencies ---
-  quickshell            # QuickShell panel framework
-  qt6.qtmultimedia      # Required by QuickShell for Background module
-  qt6.qtdeclarative
-  qt6.qtwayland
-  cava                  # Audio visualizer (music widget)
-  mpvpaper              # Video wallpaper
+  # --- Ricing Dependencies ---
+  swaynotificationcenter # SwayNC Notification & Control Center
+  networkmanagerapplet   # For SwayNC/Waybar wifi module
+  blueman                # For Bluetooth module
   ffmpeg                # Video thumbnail generation
   jq                    # JSON processing (cartoon-shell scripts)
   curl                  # API calls

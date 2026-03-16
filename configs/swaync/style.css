@@ -1,0 +1,143 @@
+/* ==========================================
+ * Premium SwayNC Style (Matching Waybar)
+ * ========================================== */
+
+@define-color base #141413;
+@define-color mantle #1e1e1e;
+@define-color text #faf9f5;
+@define-color subtext #b0aea5;
+@define-color accent #d97757;
+@define-color red #e06c75;
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Poppins", sans-serif;
+    font-size: 14px;
+}
+
+/* Control Center Base */
+.control-center {
+    background: alpha(@base, 0.9);
+    border: 2px solid rgba(217, 119, 87, 0.4);
+    border-radius: 16px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    color: @text;
+}
+
+.control-center-list {
+    background: transparent;
+}
+
+.control-center-list-placeholder {
+    opacity: 0.5;
+}
+
+/* Notification Window */
+.floating-notifications {
+    background: transparent;
+}
+
+.notification-row {
+    outline: none;
+    margin: 8px 15px;
+    padding: 0;
+}
+
+.notification {
+    background: @mantle;
+    border: 1px solid rgba(217, 119, 87, 0.3);
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    margin: 0px;
+    min-height: 80px;
+}
+
+.notification-content {
+    background: transparent;
+    padding: 6px;
+    border-radius: 8px;
+}
+
+/* Headers & Text */
+.widget-title {
+    color: @text;
+    background: transparent;
+    padding: 8px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.widget-title>button {
+    font-size: 14px;
+    color: @text;
+    background: @mantle;
+    border-radius: 8px;
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.widget-title>button:hover {
+    background: @accent;
+    color: @base;
+}
+
+/* MPRIS Media Player Widget */
+.widget-mpris {
+    background: @mantle;
+    border-radius: 12px;
+    margin: 8px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.widget-mpris-player>box>image {
+    border-radius: 12px;
+}
+
+/* Sliders (Volume, Brightness) */
+.widget-volume,
+.widget-backlight {
+    background: @mantle;
+    border-radius: 12px;
+    margin: 4px 8px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+scale trough {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    min-height: 8px;
+}
+
+scale highlight {
+    background: @accent;
+    border-radius: 8px;
+}
+
+scale slider {
+    background: @text;
+    min-width: 14px;
+    min-height: 14px;
+    border-radius: 50%;
+}
+
+/* Do Not Disturb Widget */
+.widget-dnd {
+    margin: 8px;
+}
+
+.widget-dnd>switch {
+    background: @mantle;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.widget-dnd>switch:checked {
+    background: @accent;
+}
+
+.widget-dnd>switch slider {
+    background: @text;
+    border-radius: 50%;
+}
