@@ -18,6 +18,7 @@
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+    # 1. OS Configuration (nh os switch)
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs; };
       modules = [
@@ -30,6 +31,15 @@
           home-manager.extraSpecialArgs = { inherit inputs; };
           home-manager.users.juang = import ./home/default.nix;
         }
+      ];
+    };
+
+    # 2. Standalone Home Manager Configuration (nh home switch)
+    homeConfigurations."juang@nixos" = home-manager.lib.homeManagerConfiguration {
+      pkgs = nixpkgs.legacyPackages."x86_64-linux";
+      extraSpecialArgs = { inherit inputs; };
+      modules = [
+        ./home/default.nix
       ];
     };
   };

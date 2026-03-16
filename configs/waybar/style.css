@@ -2,14 +2,14 @@
  * Premium Waybar Style (HyDE / Anthropic Inspired)
  * ========================================== */
 
-@define-color base   #141413; /* Very dark background */
-@define-color mantle #1e1e1e; /* Slightly lighter */
-@define-color text   #faf9f5;
+@define-color base #141413;
+@define-color mantle #1e1e1e;
+@define-color text #faf9f5;
 @define-color subtext #b0aea5;
-@define-color accent #d97757; /* Orange emphasis */
-@define-color blue   #6a9bcc;
-@define-color green  #788c5d;
-@define-color red    #e06c75;
+@define-color accent #d97757;
+@define-color blue #6a9bcc;
+@define-color green #788c5d;
+@define-color red #e06c75;
 
 * {
     font-family: "JetBrainsMono Nerd Font", "Poppins", sans-serif;
@@ -28,25 +28,26 @@ tooltip {
     border: 2px solid @accent;
     border-radius: 12px;
 }
+
 tooltip label {
     color: @text;
     padding: 6px;
 }
 
 /* Modules generic */
-.modules-left > widget > button,
-.modules-left > widget > label,
-.modules-left > widget > box,
-.modules-center > widget > button,
-.modules-center > widget > label,
-.modules-center > widget > box,
-.modules-right > widget > button,
-.modules-right > widget > label,
-.modules-right > widget > box {
+.modules-left>widget>button,
+.modules-left>widget>label,
+.modules-left>widget>box,
+.modules-center>widget>button,
+.modules-center>widget>label,
+.modules-center>widget>box,
+.modules-right>widget>button,
+.modules-right>widget>label,
+.modules-right>widget>box {
     background-color: @base;
     color: @text;
     border-radius: 20px;
-    padding: 4px 14px;
+    padding: 2px 14px;
     margin: 4px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(217, 119, 87, 0.2);
@@ -55,10 +56,11 @@ tooltip label {
 /* Launcher */
 #custom-launcher {
     color: @blue;
-    font-size: 18px;
+    font-size: 20px;
     padding-right: 18px;
     padding-left: 14px;
 }
+
 #custom-launcher:hover {
     color: @accent;
 }
@@ -67,6 +69,7 @@ tooltip label {
 #workspaces {
     padding: 0 4px;
 }
+
 #workspaces button {
     color: @subtext;
     border-radius: 50%;
@@ -75,12 +78,14 @@ tooltip label {
     min-width: 28px;
     transition: all 0.2s cubic-bezier(0.55, -0.68, 0.48, 1.68);
 }
+
 #workspaces button.active {
     color: @base;
     background-color: @accent;
     min-width: 40px;
     border-radius: 20px;
 }
+
 #workspaces button:hover {
     background-color: rgba(217, 119, 87, 0.3);
     color: @text;
@@ -90,8 +95,31 @@ tooltip label {
 #clock {
     color: @text;
     font-weight: 700;
-    background-color: @base;
-    border: 2px solid @accent;
+}
+
+/* Taskbar (Window List) */
+#taskbar {
+    padding: 0 4px;
+}
+
+#taskbar button {
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 4px 8px;
+    margin: 2px 4px;
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
+}
+
+#taskbar button:hover {
+    background-color: rgba(217, 119, 87, 0.2);
+    border-bottom: 2px solid rgba(217, 119, 87, 0.5);
+}
+
+#taskbar button.active {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom: 2px solid @accent;
+    border-radius: 8px 8px 0 0;
 }
 
 /* Hardware & System Info */
@@ -101,6 +129,7 @@ tooltip label {
 #tray {
     color: @text;
 }
+
 #custom-notification {
     color: @accent;
     font-size: 16px;
@@ -111,11 +140,15 @@ tooltip label {
 #battery.warning {
     color: @accent;
 }
+
 #battery.critical {
     color: @red;
     animation: blink 1s steps(2, start) infinite;
 }
 
 @keyframes blink {
-    to { background-color: @red; color: @base; }
+    to {
+        background-color: @red;
+        color: @base;
+    }
 }

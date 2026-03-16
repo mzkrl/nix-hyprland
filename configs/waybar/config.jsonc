@@ -1,10 +1,10 @@
 {
     "layer": "top",
-    "position": "top",
-    "margin-top": 10,
-    "margin-left": 15,
-    "margin-right": 15,
+    "position": "bottom",
     "margin-bottom": 0,
+    "margin-left": 0,
+    "margin-right": 0,
+    "margin-top": 0,
     "height": 44,
     "spacing": 8,
     "exclusive": true,
@@ -24,6 +24,7 @@
         "pulseaudio",
         "network",
         "battery",
+        "clock",
         "custom/notification"
     ],
     // --- Module Configurations ---
@@ -51,11 +52,22 @@
             "*": 5
         }
     },
-    "hyprland/window": {
-        "format": "{class}",
-        "max-length": 30,
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 22,
+        "icon-theme": "Papirus-Dark",
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "ignore-list": [
+            "Alacritty"
+        ],
+        "app_ids-mapping": {
+            "firefoxdeveloperedition": "firefox-developer-edition"
+        },
         "rewrite": {
-            "": "Desktop"
+            "Firefox Web Browser": "Firefox",
+            "Foot Server": "Terminal"
         }
     },
     "clock": {
