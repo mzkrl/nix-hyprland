@@ -106,6 +106,12 @@
     enableFishIntegration = true;
   };
 
+  # Zoxide Configuration
+  programs.zoxide = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
   # Hyprlock Configuration (Declarative)
   programs.hyprlock = {
     enable = true;
