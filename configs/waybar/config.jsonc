@@ -18,6 +18,7 @@
 
     // Modules Center
     "modules-center": [
+        "mpris",
         "clock"
     ],
 
@@ -75,6 +76,21 @@
             "Firefox Web Browser": "Firefox",
             "Foot Server": "Terminal"
         }
+    },
+
+    "mpris": {
+        "format": "{player_icon} {dynamic}",
+        "format-paused": "{status_icon} <i>{dynamic}</i>",
+        "player-icons": {
+            "default": "▶",
+            "mpv": "🎵",
+            "spotify": ""
+        },
+        "status-icons": {
+            "paused": "⏸"
+        },
+        "dynamic-len": 40,
+        "dynamic-order": ["title", "artist"]
     },
 
     "clock": {
