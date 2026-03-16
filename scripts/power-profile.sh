@@ -64,28 +64,28 @@ apply_profile() {
     case "$mode" in
         performa)
             powerprofilesctl set performance
-            brightnessctl set 100%
+            # brightnessctl set 100% #gausah edit brightness lah, sakit mata euy
             set_animations full
             gpu_on
             notify-send -u normal -i battery-full-charging "⚡ Mode Performa" "CPU: performance | GPU: ON | Brightness: 100%"
             ;;
         balance)
             powerprofilesctl set balanced
-            brightnessctl set 70%
+            # brightnessctl set 70%
             set_animations full
             gpu_on
             notify-send -u normal -i battery-good "⚖️ Mode Balance" "CPU: balanced | GPU: ON (offload) | Brightness: 70%"
             ;;
         hemat)
             powerprofilesctl set power-saver
-            brightnessctl set 40%
+            # brightnessctl set 40%
             set_animations reduced
             gpu_on
             notify-send -u normal -i battery-low "🔋 Mode Hemat" "CPU: power-saver | GPU: ON (low) | Brightness: 40%"
             ;;
         ultra-hemat)
             powerprofilesctl set power-saver
-            brightnessctl set 25%
+            # brightnessctl set 25%
             set_animations minimal
             gpu_off
             notify-send -u normal -i battery-caution "🪫 Mode Ultra Hemat" "CPU: power-saver | GPU: OFF | Brightness: 25%"
