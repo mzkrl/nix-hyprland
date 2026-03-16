@@ -232,6 +232,7 @@ home.file.".config/hypr/hyprpaper.conf".source = ../configs/hypr/hyprpaper.conf;
 # Waybar — fallback panel
 home.file.".config/waybar/config.jsonc".source = ../configs/waybar/config.jsonc;
 home.file.".config/waybar/style.css".source = ../configs/waybar/style.css;
+home.file.".config/waybar/colors.css".source = ../configs/waybar/colors.css;
 
 # SwayNC — Control Center
 home.file.".config/swaync/config.json".source = ../configs/swaync/config.json;
