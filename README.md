@@ -292,14 +292,18 @@ nix search nixpkgs <package-name>
 ### Power Management
 
 ```bash
+# These are shell aliases defined in home/default.nix
+
 # View current power profile
 power
 
 # Switch to performance mode
 performa
 
-# Switch to balanced mode
+# Switch to balanced mode (alias for the script's "balance" profile)
 hemat
+# Or call the script directly:
+power-profile.sh balance
 
 # Switch to power-saver mode
 ultra-hemat
