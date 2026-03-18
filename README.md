@@ -250,13 +250,15 @@ Main config file: `configs/hypr/hyprland.conf`
 | `SUPER + SHIFT + 1-9` | Move window to workspace |
 | `SUPER + Mouse Left` | Move window |
 | `SUPER + Mouse Right` | Resize window |
-| `SUPER + Tab` | Cycle windows |
+| `ALT + Tab` | Cycle windows |
 
 ### Utilities
 
 | Key Combination | Action |
 |----------------|--------|
-| `SUPER + SHIFT + S` | Screenshot area |
+| `Print` | Screenshot full screen |
+| `SHIFT + Print` | Screenshot area |
+| `SUPER + SHIFT + S` | Toggle special workspace |
 | `SUPER + CTRL + V` | Clipboard history |
 | `XF86AudioMute` | Toggle mute |
 | `XF86AudioRaiseVolume` | Increase volume |
