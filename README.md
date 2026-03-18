@@ -231,9 +231,9 @@ Main config file: `configs/hypr/hyprland.conf`
 
 | Key Combination | Action |
 |----------------|--------|
-| `SUPER + Return` | Launch terminal (Kitty) |
+| `SUPER + Q` | Launch terminal (Kitty) |
 | `SUPER + D` | Application launcher (Fuzzel) |
-| `SUPER + Q` | Close active window |
+| `SUPER + C` | Close active window |
 | `SUPER + V` | Toggle floating mode |
 | `SUPER + F` | Toggle fullscreen |
 | `SUPER + E` | File manager (Thunar) |
