@@ -246,6 +246,10 @@ home.file.".local/bin/power-profile" = {
   source = ../scripts/power-profile.sh;
   executable = true;
 };
+home.file.".icons/kanade" = {
+  source = ./assets/kanade;
+  recursive = true;
+};
 
 # Fuzzel App Launcher Config
 home.file.".config/fuzzel/fuzzel.ini".text = ''
