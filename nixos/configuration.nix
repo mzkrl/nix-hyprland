@@ -114,6 +114,7 @@ environment.systemPackages = with pkgs; [
   git glab gh antigravity
   htop gparted baobab thunar brave killall
   bat                   # Pengganti cat yang cakep
+  # steam
 
   # --- Utilities ---
   wlr-randr             # Monitor management

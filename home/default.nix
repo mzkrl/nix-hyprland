@@ -247,7 +247,7 @@ home.file.".local/bin/power-profile" = {
   executable = true;
 };
 home.file.".icons/kanade" = {
-  source = ./assets/kanade;
+  source = ../assets/kanade;
   recursive = true;
 };
 
@@ -315,9 +315,13 @@ programs.fish = {
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
-    cursorTheme = {
-      name = "Adwaita";
-      package = pkgs.adwaita-icon-theme;
+#    cursorTheme = {
+#      name = "Adwaita";
+#      package = pkgs.adwaita-icon-theme;
+#    };
+     cursorTheme = {
+       name = "kanade";
+       size = 24;
     };
   };
 
