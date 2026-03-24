@@ -1,17 +1,17 @@
 { inputs, pkgs, lib, config, ... }: {
-  # imports = [
-  #   inputs.caelestia-shell.homeManagerModules.default
-  # ];
+  imports = [
+    inputs.caelestia-shell.homeManagerModules.default
+  ];
 
   home.username = "juang";
   home.homeDirectory = "/home/juang";
   home.stateVersion = "25.11";
 
-  # Caelestia Shell Configuration (DISABLED - BROKEN) #per 12-3-2026, caelestia rusak karena versi, sekarang tanggal 24-3-2026.
-  # programs.caelestia = {
-  #   enable = true;
-  #   package = inputs.caelestia-shell.packages.${pkgs.system}.default;
-  # };
+  # Caelestia Shell Configuration
+  programs.caelestia = {
+    enable = true;
+    package = inputs.caelestia-shell.packages.${pkgs.system}.default;
+  };
   # User specific packages
   home.packages = with pkgs; [
     # Desktop Utilities
@@ -331,8 +331,8 @@ programs.fish = {
     settings = {
       add_newline = false;
       character = {
-        success_symbol = "[➜](bold green)";
-        error_symbol = "[➜](bold red)";
+        success_symbol = "[➜](bold #d97757)";
+        error_symbol = "[✗](bold #d97757)";
       };
     };
   };
@@ -349,8 +349,22 @@ programs.fish = {
     extraConfig = builtins.readFile ../configs/hypr/hyprland.conf;
   };
 
+  # Startpage
+  home.file.".config/startpage/index.html".source = ../configs/startpage/index.html;
+
   # Firefox
-  programs.firefox.enable = true;
+  programs.firefox = {
+    enable = true;
+    profiles.juang = {
+      isDefault = true;
+      userChrome = builtins.readFile ../configs/firefox/userChrome.css;
+      settings = {
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        "browser.startup.homepage" = "file://${config.home.homeDirectory}/.config/startpage/index.html";
+        "browser.newtabpage.enabled" = false;
+      };
+    };
+  };
   
   # Environment Variables
   home.sessionVariables = {

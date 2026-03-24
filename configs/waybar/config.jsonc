@@ -176,6 +176,7 @@
     },
 
     "temperature": {
+        "thermal-zone": 0,
         "critical-threshold": 80,
         "format": "{icon} {temperatureC}°C",
         "format-icons": ["", "", "", "", ""]

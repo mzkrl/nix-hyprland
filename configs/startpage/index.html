@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start</title>
+    <style>
+        :root {
+            --bg: #141413;
+            --fg: #faf9f5;
+            --accent: #d97757;
+            --hover: #1e1e1e;
+            --border: #788c5d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: "JetBrainsMono Nerd Font", "Poppins", sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+        }
+
+        .time {
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--fg);
+            letter-spacing: -2px;
+        }
+
+        .date {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-top: -0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 0.8rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(217, 119, 87, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: var(--fg);
+            font-size: 1.1rem;
+            width: 300px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .search-box input::placeholder {
+            color: rgba(250, 249, 245, 0.3);
+        }
+
+        .links {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .link-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .link-group-title {
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .link-group a {
+            color: rgba(250, 249, 245, 0.7);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        .link-group a:hover {
+            color: var(--fg);
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="time" id="time">00:00</div>
+            <div class="date" id="date">DAY, MONTH DD</div>
+        </div>
+
+        <form action="https://duckduckgo.com/" method="get" class="search-box">
+            <input type="text" name="q" placeholder="Search..." autofocus autocomplete="off">
+        </form>
+
+        <div class="links">
+            <div class="link-group">
+                <div class="link-group-title">Dev</div>
+                <a href="https://github.com">GitHub</a>
+                <a href="https://search.nixos.org">NixOS</a>
+                <a href="https://stackoverflow.com">StackOverflow</a>
+            </div>
+            <div class="link-group">
+                <div class="link-group-title">Media</div>
+                <a href="https://youtube.com">YouTube</a>
+                <a href="https://open.spotify.com">Spotify</a>
+                <a href="https://reddit.com">Reddit</a>
+            </div>
+            <div class="link-group">
+                <div class="link-group-title">Work</div>
+                <a href="https://notion.so">Notion</a>
+                <a href="https://mail.google.com">Gmail</a>
+                <a href="https://chat.openai.com">ChatGPT</a>
+            </div>
+            <div class="link-group">
+                <div class="link-group-title">Other</div>
+                <a href="https://news.ycombinator.com">HN</a>
+                <a href="https://twitter.com">X (Twitter)</a>
+                <a href="https://discord.com/app">Discord</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('time').textContent = `${hours}:${minutes}`;
+
+            const options = { weekday: 'short', month: 'short', day: 'numeric' };
+            document.getElementById('date').textContent = now.toLocaleDateString('en-US', options).toUpperCase();
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>
