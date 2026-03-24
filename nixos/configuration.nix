@@ -27,7 +27,7 @@
   boot.loader.efi.efiSysMountPoint = "/boot";
 
   # Use latest kernel and NVIDIA optimizations for Hyprland
-  boot.kernelPackages = pkgs.linuxPackages; # _latest;
+  boot.kernelPackages = pkgs.linuxPackages; # _latest;  #saat ini lagi ga pake yg latest, kenak masalah sama driver nvidia, tapi boleh di coba.
   boot.kernelParams = [ 
     "nvidia_drm.fbdev=1" 
     "nvidia-drm.modeset=1"

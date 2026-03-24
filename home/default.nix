@@ -7,7 +7,7 @@
   home.homeDirectory = "/home/juang";
   home.stateVersion = "25.11";
 
-  # Caelestia Shell Configuration (DISABLED - BROKEN)
+  # Caelestia Shell Configuration (DISABLED - BROKEN) #per 12-3-2026, caelestia rusak karena versi, sekarang tanggal 24-3-2026.
   # programs.caelestia = {
   #   enable = true;
   #   package = inputs.caelestia-shell.packages.${pkgs.system}.default;
