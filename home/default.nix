@@ -7,7 +7,7 @@
   home.homeDirectory = "/home/juang";
   home.stateVersion = "25.11";
 
-  # Caelestia Shell Configuration (DISABLED - BROKEN)
+  # Caelestia Shell Configuration (DISABLED - BROKEN) #per 12-3-2026, caelestia rusak karena versi, sekarang tanggal 24-3-2026.
   # programs.caelestia = {
   #   enable = true;
   #   package = inputs.caelestia-shell.packages.${pkgs.system}.default;
@@ -41,15 +41,14 @@
     bat                   # cat with wings
 
     # Apps
-    firefox antigravity
-    discord
+    # firefox antigravity discord # udah ada di configuration.nix, biar ga double.
 
     # Dev & Terminal
-    git
-    gh
-    glab
-    nodejs_22
-    bun
+    # git
+    # gh
+    # glab
+    # nodejs_22
+    # bun #sama kyk diatas
     starship
     direnv
     ripgrep
@@ -246,6 +245,10 @@ home.file.".local/bin/power-profile" = {
   source = ../scripts/power-profile.sh;
   executable = true;
 };
+home.file.".icons/kanade" = {
+  source = ../assets/kanade;
+  recursive = true;
+};
 
 # Fuzzel App Launcher Config
 home.file.".config/fuzzel/fuzzel.ini".text = ''
@@ -311,9 +314,13 @@ programs.fish = {
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
-    cursorTheme = {
-      name = "Adwaita";
-      package = pkgs.adwaita-icon-theme;
+#    cursorTheme = {
+#      name = "Adwaita";
+#      package = pkgs.adwaita-icon-theme;
+#    };
+     cursorTheme = {
+       name = "kanade";
+       size = 24;
     };
   };
 
