@@ -407,6 +407,11 @@ programs.fish = {
     LIBVA_DRIVER_NAME = "nvidia";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
+    
+    # QML & Qt Rendering Optimizations for Caelestia
+    QSG_RENDER_LOOP = "basic";       # Fixes stutter on NVIDIA + Wayland
+    QT_QUICK_COMPILER_SKIPPED = "0"; # Force QML AOT compilation if available
+    QML_DISABLE_DISK_CACHE = "0";    # Ensure QML disk caching is turned on
   };
 
   programs.home-manager.enable = true;

@@ -2,6 +2,7 @@
 # ==========================================
 # APPLY RICE - NixOS Flake + Home Manager
 # ==========================================
+# kinda deprecated
 set -e
 
 GREEN='\033[0;32m'
