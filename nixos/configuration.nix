@@ -111,7 +111,8 @@ environment.systemPackages = with pkgs; [
     exec "$@"
   '')
   wget
-  git glab gh antigravity
+  git glab gh nodejs_22 bun 
+  antigravity zed-editor firefox discord
   htop gparted baobab thunar brave killall
   bat                   # Pengganti cat yang cakep
   # steam

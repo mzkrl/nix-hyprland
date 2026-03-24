@@ -41,15 +41,14 @@
     bat                   # cat with wings
 
     # Apps
-    firefox antigravity
-    discord
+    # firefox antigravity discord # udah ada di configuration.nix, biar ga double.
 
     # Dev & Terminal
-    git
-    gh
-    glab
-    nodejs_22
-    bun
+    # git
+    # gh
+    # glab
+    # nodejs_22
+    # bun #sama kyk diatas
     starship
     direnv
     ripgrep
