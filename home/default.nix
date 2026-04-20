@@ -44,53 +44,48 @@
   };
   # User specific packages
   home.packages = with pkgs; [
-    # Desktop Utilities
-    swaybg                 # Wallpaper daemon (hyprpaper has protocol mismatch with Hyprland flake)
+    # --- Desktop Ricing & Compositor ---
+    swaybg                 # Wallpaper daemon
     hypridle               # Idle daemon
-    waybar                # Fallback panel (backup)
+    waybar                 # Fallback panel
+    swaynotificationcenter # SwayNC
     networkmanagerapplet
-    pavucontrol
-    brightnessctl
-    playerctl
+    blueman
+    kitty                  # Terminal
+    fuzzel                 # App Launcher
+
+    # --- Clipboard & Screenshot ---
     wl-clipboard
     cliphist
-    libnotify
     grim
     slurp
     swappy
+    hyprpicker
+    ffmpeg
 
-    # Modern CLI Suite
-    eza
+    # --- Development & CLI Power Tools ---
+    nodejs_22
+    bun
     zoxide
     fzf
-    fastfetch
-    nh
-    nix-output-monitor
-    nvd
-    btop                  # System monitor gahar
-    lm_sensors            # Hardware sensor monitoring (CPU/GPU temp)
-    bat                   # cat with wings
-
-    # Apps
-    # firefox antigravity discord # udah ada di configuration.nix, biar ga double.
-
-    # Dev & Terminal
-    # git
-    # gh
-    # glab
-    # nodejs_22
-    # bun #sama kyk diatas
-    starship
     direnv
     ripgrep
     fd
+    starship
+    wev                    # Debug keyland events
+    lm_sensors
 
-    # Theme & Icons
+    # --- Nix OS Utilities ---
+    nh
+    nix-output-monitor
+    nvd
+
+    # --- System Themes & Icons ---
     adwaita-icon-theme
     gnome-themes-extra
     papirus-icon-theme
 
-    # Thunar Plugins
+    # --- Ex-Thunar Plugins ---
     thunar-archive-plugin
     thunar-volman
   ];
@@ -326,8 +321,9 @@ programs.fish = {
     ".." = "cd ..";
     update = "nh os switch /home/juang/Pictures/hyprland/hyprland-claude";
     clean = "nh clean all";
+    optimise = "nix-store --optimise";
     fetch = "fastfetch --config config.jsonc";
-    btop = "btop --utf-force";
+    btop = "btop --force-utf ";
     # Power profiles
     power = "~/.local/bin/power-profile";
     performa = "~/.local/bin/power-profile set performa";
