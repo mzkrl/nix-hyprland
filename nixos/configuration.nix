@@ -126,7 +126,7 @@ environment.systemPackages = with pkgs; [
   libnotify
 
   # --- Main Applications ---
-  firefox brave discord antigravity zed-editor thunar cider tailscale vscode #steam
+  brave discord antigravity zed-editor thunar cider tailscale vscode #steam
 ];
 
   # Fonts configuration

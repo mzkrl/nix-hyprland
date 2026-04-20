@@ -382,17 +382,15 @@ programs.fish = {
   # Startpage
   home.file.".config/startpage/index.html".source = ../configs/startpage/index.html;
 
-  # Firefox
-  programs.firefox = {
+  # Default Applications
+  xdg.mimeApps = {
     enable = true;
-    profiles.juang = {
-      isDefault = true;
-      userChrome = builtins.readFile ../configs/firefox/userChrome.css;
-      settings = {
-        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-        "browser.startup.homepage" = "file://${config.home.homeDirectory}/.config/startpage/index.html";
-        "browser.newtabpage.enabled" = false;
-      };
+    defaultApplications = {
+      "text/html" = "brave-browser.desktop";
+      "x-scheme-handler/http" = "brave-browser.desktop";
+      "x-scheme-handler/https" = "brave-browser.desktop";
+      "x-scheme-handler/about" = "brave-browser.desktop";
+      "x-scheme-handler/unknown" = "brave-browser.desktop";
     };
   };
   
