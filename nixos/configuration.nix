@@ -80,6 +80,7 @@
 
   # Nix Settings
   nix.settings = {
+    auto-optimise-store = true; # <==== TAMBAHKAN INI
     experimental-features = [ "nix-command" "flakes" ];
     substituters = [
       "https://cache.nixos.org"

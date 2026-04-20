@@ -328,7 +328,7 @@ programs.fish = {
     power = "~/.local/bin/power-profile";
     performa = "~/.local/bin/power-profile set performa";
     hemat = "~/.local/bin/power-profile set hemat";
-    "ultra-hemat" = "~/.local/bin/power-profile set ultra-hemat";
+    ultra = "~/.local/bin/power-profile set ultra-hemat";
   };
 };
 
