@@ -243,11 +243,11 @@ environment.systemPackages = with pkgs; [
     options = [ "rw" "uid=1000" "gid=100" "umask=000" "exec" ];
   };
 
-  programs.steam = {
-  enable = true;
-  remotePlay.openFirewall = true; 
-  dedicatedServer.openFirewall = true;
-};
+#   programs.steam = {
+#   enable = true;
+#   remotePlay.openFirewall = true; 
+#   dedicatedServer.openFirewall = true;
+# };
 
   fileSystems."/mnt/ubuntu" = {
     device = "/dev/disk/by-uuid/d6475f88-ab29-4e5c-bca2-49208daf86bd";
