@@ -3,7 +3,7 @@
     "position": "top",
     "margin-top": 8,
     "margin-bottom": 0,
-    "margin-left": 12,
+    "margin-left": 55,
     "margin-right": 12,
     "height": 40,
     "spacing": 8,
@@ -28,6 +28,7 @@
         "cpu",
         "memory",
         "temperature",
+        "custom/gpu-temp",
         "pulseaudio",
         "network",
         "battery",
@@ -176,9 +177,18 @@
     },
 
     "temperature": {
-        "critical-threshold": 80,
-        "format": "{icon} {temperatureC}°C",
-        "format-icons": ["", "", "", "", ""]
+        "hwmon-path": "/sys/devices/platform/coretemp.0/hwmon/hwmon5/temp1_input",
+        "critical-threshold": 90,
+        "format": "🌡 {temperatureC}°C",
+        "format-critical": "🔥 {temperatureC}°C",
+        "tooltip-format": "CPU: {temperatureC}°C"
+    },
+
+    "custom/gpu-temp": {
+        "exec": "nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null || echo OFF",
+        "format": "🎮 {}°C",
+        "interval": 5,
+        "tooltip-format": "GPU Temperature"
     },
 
     "custom/notification": {
@@ -206,6 +216,7 @@
         "exec": "~/.local/bin/power-profile waybar",
         "return-type": "json",
         "interval": 5,
+        "signal": 8,
         "on-click": "~/.local/bin/power-profile cycle",
         "on-click-right": "~/.local/bin/power-profile menu",
         "tooltip": true

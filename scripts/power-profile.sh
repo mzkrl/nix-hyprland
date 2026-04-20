@@ -81,14 +81,14 @@ apply_profile() {
             # brightnessctl set 40%
             set_animations reduced
             gpu_on
-            notify-send -u normal -i battery-low "🔋 Mode Hemat" "CPU: power-saver | GPU: ON (low) | Brightness: 40%"
+            notify-send -u normal -i battery-low "🔋 Mode Hemat" "CPU: power-saver | GPU: ON (low)\nAnimasi: reduced"
             ;;
         ultra-hemat)
             powerprofilesctl set power-saver
             # brightnessctl set 25%
             set_animations minimal
             gpu_off
-            notify-send -u normal -i battery-caution "🪫 Mode Ultra Hemat" "CPU: power-saver | GPU: OFF | Brightness: 25%"
+            notify-send -u low -i battery-caution "🪫 Mode ULTRA HEMAT" "CPU: power-saver | GPU: MATI TOTAL\nAnimasi: off | Hemat maksimal"
             ;;
         *)
             echo "Unknown mode: $mode"
@@ -97,6 +97,8 @@ apply_profile() {
     esac
 
     echo "$mode" > "$STATE_FILE"
+    # Signal waybar to refresh power-profile module instantly
+    pkill -RTMIN+8 waybar 2>/dev/null || true
 }
 
 # Cycle to the next profile

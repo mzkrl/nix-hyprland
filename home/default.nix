@@ -1,65 +1,91 @@
 { inputs, pkgs, lib, config, ... }: {
-  # imports = [
-  #   inputs.caelestia-shell.homeManagerModules.default
-  # ];
+  imports = [
+    inputs.caelestia-shell.homeManagerModules.default
+  ];
 
   home.username = "juang";
   home.homeDirectory = "/home/juang";
   home.stateVersion = "25.11";
 
-  # Caelestia Shell Configuration (DISABLED - BROKEN) #per 12-3-2026, caelestia rusak karena versi, sekarang tanggal 24-3-2026.
-  # programs.caelestia = {
-  #   enable = true;
-  #   package = inputs.caelestia-shell.packages.${pkgs.system}.default;
-  # };
+  # Caelestia Shell Configuration
+  programs.caelestia = {
+    enable = true;
+    package = inputs.caelestia-shell.packages.${pkgs.system}.default;
+    settings = {
+      services = {
+        useFahrenheit = false;
+        useFahrenheitPerformance = false;
+      };
+      background = {
+        enabled = false; # Disable Caelestia background layer entirely — swaybg handles wallpaper
+      };
+      launcher = {
+        actions = [
+          { name = "Calculator"; icon = "calculate"; description = "Do simple math equations"; command = [ "autocomplete" "calc" ]; enabled = true; dangerous = false; }
+          { name = "Scheme"; icon = "palette"; description = "Change the current colour scheme"; command = [ "autocomplete" "scheme" ]; enabled = true; dangerous = false; }
+          { name = "Wallpaper"; icon = "image"; description = "Change the current wallpaper"; command = [ "autocomplete" "wallpaper" ]; enabled = true; dangerous = false; }
+          { name = "Variant"; icon = "colors"; description = "Change the current scheme variant"; command = [ "autocomplete" "variant" ]; enabled = true; dangerous = false; }
+          { name = "Random"; icon = "casino"; description = "Switch to a random wallpaper"; command = [ "caelestia" "wallpaper" "-r" ]; enabled = true; dangerous = false; }
+          { name = "Light"; icon = "light_mode"; description = "Change the scheme to light mode"; command = [ "setMode" "light" ]; enabled = true; dangerous = false; }
+          { name = "Dark"; icon = "dark_mode"; description = "Change the scheme to dark mode"; command = [ "setMode" "dark" ]; enabled = true; dangerous = false; }
+          { name = "Shutdown"; icon = "power_settings_new"; description = "Shutdown the system"; command = [ "systemctl" "poweroff" ]; enabled = true; dangerous = true; }
+          { name = "Reboot"; icon = "cached"; description = "Reboot the system"; command = [ "systemctl" "reboot" ]; enabled = true; dangerous = true; }
+          { name = "Logout"; icon = "exit_to_app"; description = "Log out of the current session"; command = [ "loginctl" "terminate-user" "" ]; enabled = true; dangerous = true; }
+          { name = "Lock"; icon = "lock"; description = "Lock the current session"; command = [ "loginctl" "lock-session" ]; enabled = true; dangerous = false; }
+          { name = "Sleep"; icon = "bedtime"; description = "Suspend then hibernate"; command = [ "systemctl" "suspend-then-hibernate" ]; enabled = true; dangerous = false; }
+          { name = "Settings"; icon = "settings"; description = "Configure the shell"; command = [ "caelestia" "shell" "controlCenter" "open" ]; enabled = true; dangerous = false; }
+          { name = "Mode Performa"; icon = "rocket_launch"; description = "CPU: performance | GPU: ON"; command = [ "/home/juang/.local/bin/power-profile" "set" "performa" ]; enabled = true; dangerous = false; }
+          { name = "Mode Balance"; icon = "balance"; description = "CPU: balanced | GPU: ON (offload)"; command = [ "/home/juang/.local/bin/power-profile" "set" "balance" ]; enabled = true; dangerous = false; }
+          { name = "Mode Hemat"; icon = "energy_savings_leaf"; description = "CPU: power-saver | GPU: ON (low)"; command = [ "/home/juang/.local/bin/power-profile" "set" "hemat" ]; enabled = true; dangerous = false; }
+          { name = "Mode Ultra Hemat"; icon = "battery_saver"; description = "CPU: power-saver | GPU: OFF"; command = [ "/home/juang/.local/bin/power-profile" "set" "ultra-hemat" ]; enabled = true; dangerous = false; }
+        ];
+      };
+    };
+  };
   # User specific packages
   home.packages = with pkgs; [
-    # Desktop Utilities
-    hyprpaper              # Wallpaper daemon
+    # --- Desktop Ricing & Compositor ---
+    swaybg                 # Wallpaper daemon
     hypridle               # Idle daemon
-    waybar                # Fallback panel (backup)
+    waybar                 # Fallback panel
+    swaynotificationcenter # SwayNC
     networkmanagerapplet
-    pavucontrol
-    brightnessctl
-    playerctl
+    blueman
+    kitty                  # Terminal
+    fuzzel                 # App Launcher
+
+    # --- Clipboard & Screenshot ---
     wl-clipboard
     cliphist
-    libnotify
     grim
     slurp
     swappy
+    hyprpicker
+    ffmpeg
 
-    # Modern CLI Suite
-    eza
+    # --- Development & CLI Power Tools ---
+    nodejs_22
+    bun
     zoxide
     fzf
-    fastfetch
-    nh
-    nix-output-monitor
-    nvd
-    btop                  # System monitor gahar
-    bat                   # cat with wings
-
-    # Apps
-    # firefox antigravity discord # udah ada di configuration.nix, biar ga double.
-
-    # Dev & Terminal
-    # git
-    # gh
-    # glab
-    # nodejs_22
-    # bun #sama kyk diatas
-    starship
     direnv
     ripgrep
     fd
+    starship
+    wev                    # Debug keyland events
+    lm_sensors
 
-    # Theme & Icons
+    # --- Nix OS Utilities ---
+    nh
+    nix-output-monitor
+    nvd
+
+    # --- System Themes & Icons ---
     adwaita-icon-theme
     gnome-themes-extra
     papirus-icon-theme
 
-    # Thunar Plugins
+    # --- Ex-Thunar Plugins ---
     thunar-archive-plugin
     thunar-volman
   ];
@@ -86,6 +112,9 @@
       theme_background = false;
       vim_keys = true;
       update_ms = 1000;
+      show_gpu_info = "On";       # Show GPU info in the UI
+      gpu_mirror_graph = true;     # Mirror GPU graph with CPU graph
+      shown_boxes = "cpu mem net proc gpu"; # Show GPU box
     };
   };
 
@@ -292,8 +321,9 @@ programs.fish = {
     ".." = "cd ..";
     update = "nh os switch /home/juang/Pictures/hyprland/hyprland-claude";
     clean = "nh clean all";
+    optimise = "nix-store --optimise";
     fetch = "fastfetch --config config.jsonc";
-    btop = "btop --utf-force";
+    btop = "btop --force-utf ";
     # Power profiles
     power = "~/.local/bin/power-profile";
     performa = "~/.local/bin/power-profile set performa";
@@ -331,8 +361,8 @@ programs.fish = {
     settings = {
       add_newline = false;
       character = {
-        success_symbol = "[➜](bold green)";
-        error_symbol = "[➜](bold red)";
+        success_symbol = "[➜](bold #d97757)";
+        error_symbol = "[✗](bold #d97757)";
       };
     };
   };
@@ -349,8 +379,22 @@ programs.fish = {
     extraConfig = builtins.readFile ../configs/hypr/hyprland.conf;
   };
 
+  # Startpage
+  home.file.".config/startpage/index.html".source = ../configs/startpage/index.html;
+
   # Firefox
-  programs.firefox.enable = true;
+  programs.firefox = {
+    enable = true;
+    profiles.juang = {
+      isDefault = true;
+      userChrome = builtins.readFile ../configs/firefox/userChrome.css;
+      settings = {
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        "browser.startup.homepage" = "file://${config.home.homeDirectory}/.config/startpage/index.html";
+        "browser.newtabpage.enabled" = false;
+      };
+    };
+  };
   
   # Environment Variables
   home.sessionVariables = {
@@ -359,6 +403,11 @@ programs.fish = {
     LIBVA_DRIVER_NAME = "nvidia";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
+    
+    # QML & Qt Rendering Optimizations for Caelestia
+    QSG_RENDER_LOOP = "basic";       # Fixes stutter on NVIDIA + Wayland
+    QT_QUICK_COMPILER_SKIPPED = "0"; # Force QML AOT compilation if available
+    QML_DISABLE_DISK_CACHE = "0";    # Ensure QML disk caching is turned on
   };
 
   programs.home-manager.enable = true;

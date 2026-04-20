@@ -101,6 +101,7 @@ programs.nh = {
 
 # List packages installed in system profile.
 environment.systemPackages = with pkgs; [
+  # --- Core System & Authentication ---
   polkit_gnome
   xhost
   (writeShellScriptBin "nvidia-offload" ''
@@ -110,49 +111,21 @@ environment.systemPackages = with pkgs; [
     export __VK_LAYER_NV_optimus=NVIDIA_only
     exec "$@"
   '')
-  wget
-  git glab gh nodejs_22 bun 
-  antigravity zed-editor firefox discord
-  htop gparted baobab thunar brave killall
-  bat                   # Pengganti cat yang cakep
-  # steam
-
-  # --- Utilities ---
-  wlr-randr             # Monitor management
-  hyprpicker            # Color picker
-  wev                   # Debug key events
-  pciutils              # Buat cek lspci
   tuigreet              # Login manager
-  starship
+  
+  # --- General Utilities & CLI Basics ---
+  wget curl git gh glab jq python3
+  killall pciutils iproute2 procps
+  bat htop btop eza fastfetch 
+  php php84Packages.composer #aih najis selesai uprak apus
+  
+  # --- Hardware & Disk Utilities ---
+  gparted baobab wlr-randr
+  pavucontrol brightnessctl playerctl
+  libnotify
 
-  # --- Ricing Dependencies ---
-  swaynotificationcenter # SwayNC Notification & Control Center
-  networkmanagerapplet   # For SwayNC/Waybar wifi module
-  blueman                # For Bluetooth module
-  ffmpeg                # Video thumbnail generation
-  jq                    # JSON processing (cartoon-shell scripts)
-  curl                  # API calls
-  python3               # cartoon-shell scripts
-  iproute2              # `ip` command (network info)
-  procps                # `top`, `free` (system info)
-  fuzzel                # App launcher (pengganti wofi)
-
-  # --- Desktop / Ricing ---
-  waybar                # Bar / Taskbar
-  kitty                 # Terminal
-  libnotify             # notify-send
-  grim                  # Screenshot
-  slurp                 # Area-select for screenshot
-  swappy                # Screenshot editor
-
-  # --- Audio ---
-  pavucontrol           # PulseAudio Volume Control
-  brightnessctl         # Brightness
-  playerctl             # Media controls
-
-  # --- Clipboard ---
-  wl-clipboard
-  cliphist
+  # --- Main Applications ---
+  firefox brave discord antigravity zed-editor thunar cider tailscale vscode #steam
 ];
 
   # Fonts configuration
@@ -258,6 +231,28 @@ environment.systemPackages = with pkgs; [
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
+  };
+
+  # ==========================================
+  # PERSISTENT MOUNTS (Windows & Ubuntu)
+  # ==========================================
+  fileSystems."/mnt/windows" = {
+    device = "/dev/disk/by-uuid/960C00360C001441";
+    fsType = "ntfs-3g";
+    # Mengizinkan execution dan akses full (rwxrwxrwx) agar game Steam & Proton bisa jalan
+    options = [ "rw" "uid=1000" "gid=100" "umask=000" "exec" ];
+  };
+
+  programs.steam = {
+  enable = true;
+  remotePlay.openFirewall = true; 
+  dedicatedServer.openFirewall = true;
+};
+
+  fileSystems."/mnt/ubuntu" = {
+    device = "/dev/disk/by-uuid/d6475f88-ab29-4e5c-bca2-49208daf86bd";
+    fsType = "ext4";
+    options = [ "defaults" ];
   };
 
   system.stateVersion = "25.11"; 

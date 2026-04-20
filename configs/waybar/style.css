@@ -1,9 +1,8 @@
 @import "colors.css";
 
 * {
-    /* Anthropic typography guidelines */
-    font-family: 'Poppins', 'Lora', sans-serif;
-    font-size: 14px;
+    font-family: 'Poppins', 'Inter', sans-serif;
+    font-size: 13px;
     font-weight: 500;
     border: none;
     border-radius: 0;
@@ -13,44 +12,49 @@
 }
 
 window#waybar {
-    background-color: transparent; /* Main bar is transparent */
+    background-color: transparent;
     color: @text-primary;
 }
 
-/* Glassmorphism style for all modules */
+/* === Glassmorphism pills for all modules === */
 .modules-left > widget > *,
 .modules-center > widget > *,
 .modules-right > widget > * {
     background-color: @bg-primary;
-    border-radius: 16px;
-    margin: 6px 8px;
-    padding: 4px 16px;
-    box-shadow: 0px 4px 6px rgba(20, 20, 19, 0.4);
-    /* Frosted glass effect */
-    /* Note: Depending on Waybar version, backdrop-filter might need specific config */
+    border-radius: 14px;
+    margin: 4px 4px;
+    padding: 4px 14px;
+    border: 1px solid rgba(250, 249, 245, 0.06);
+    transition: all 0.2s ease;
 }
 
-/* Specific module styling */
+/* Hover glow on all modules */
+.modules-left > widget > *:hover,
+.modules-center > widget > *:hover,
+.modules-right > widget > *:hover {
+    background-color: @bg-hover;
+    border: 1px solid rgba(217, 119, 87, 0.3);
+}
 
+/* === Workspaces === */
 #workspaces button {
     padding: 2px 8px;
-    margin: 0 4px;
+    margin: 0 3px;
     color: @anthropic-mid-gray;
     background: transparent;
-    border-radius: 12px;
+    border-radius: 10px;
     transition: all 0.3s ease;
 }
 
 #workspaces button:hover {
     color: @anthropic-light;
     background-color: @bg-hover;
-    box-shadow: inherit;
-    text-shadow: inherit;
 }
 
 #workspaces button.active {
     color: @anthropic-orange;
     font-weight: 700;
+    background-color: rgba(217, 119, 87, 0.12);
 }
 
 #workspaces button.urgent {
@@ -58,12 +62,13 @@ window#waybar {
     background-color: @anthropic-orange;
 }
 
-/* Accents for different modules */
+/* === Clock (Accent: Blue) === */
 #clock {
     color: @anthropic-blue;
     font-weight: 600;
 }
 
+/* === Battery (Accent: Green) === */
 #battery {
     color: @anthropic-green;
 }
@@ -82,28 +87,24 @@ window#waybar {
     50% { color: @anthropic-orange; background-color: transparent; }
 }
 
+/* === Status modules === */
 #pulseaudio,
 #network,
 #cpu,
 #memory,
 #temperature,
-#custom-media,
 #tray,
 #idle_inhibitor {
     color: @anthropic-light;
 }
 
-/* Hover effects */
-#pulseaudio:hover,
-#network:hover,
-#battery:hover {
-    background-color: @bg-hover;
+#temperature.critical {
     color: @anthropic-orange;
 }
 
-/* Power Profile Module */
+/* === Power Profile Module === */
 #custom-power-profile {
-    font-size: 16px;
+    font-size: 15px;
     padding: 4px 14px;
     transition: all 0.3s ease;
 }
@@ -125,6 +126,21 @@ window#waybar {
     background-color: rgba(217, 119, 87, 0.15);
 }
 
-#custom-power-profile:hover {
-    background-color: @bg-hover;
+/* === MPRIS === */
+#mpris {
+    color: @anthropic-light-gray;
+    font-style: italic;
+}
+
+/* === Launcher button === */
+#custom-launcher {
+    color: @anthropic-orange;
+    font-size: 18px;
+    padding: 4px 14px;
+}
+
+/* === Notification bell === */
+#custom-notification {
+    color: @anthropic-light;
+    font-size: 15px;
 }
