@@ -80,6 +80,7 @@
 
   # Nix Settings
   nix.settings = {
+    auto-optimise-store = true; # <==== TAMBAHKAN INI
     experimental-features = [ "nix-command" "flakes" ];
     substituters = [
       "https://cache.nixos.org"
@@ -125,7 +126,7 @@ environment.systemPackages = with pkgs; [
   libnotify
 
   # --- Main Applications ---
-  firefox brave discord antigravity zed-editor thunar cider tailscale vscode #steam
+  brave discord antigravity zed-editor thunar cider tailscale vscode #steam
 ];
 
   # Fonts configuration
@@ -243,11 +244,11 @@ environment.systemPackages = with pkgs; [
     options = [ "rw" "uid=1000" "gid=100" "umask=000" "exec" ];
   };
 
-  programs.steam = {
-  enable = true;
-  remotePlay.openFirewall = true; 
-  dedicatedServer.openFirewall = true;
-};
+#   programs.steam = {
+#   enable = true;
+#   remotePlay.openFirewall = true; 
+#   dedicatedServer.openFirewall = true;
+# };
 
   fileSystems."/mnt/ubuntu" = {
     device = "/dev/disk/by-uuid/d6475f88-ab29-4e5c-bca2-49208daf86bd";
