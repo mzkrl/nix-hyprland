@@ -320,6 +320,7 @@ programs.fish = {
     cd = "z";
     ".." = "cd ..";
     update = "nh os switch /home/juang/Pictures/hyprland/hyprland-claude";
+    update-safe = "nh os switch /home/juang/Pictures/hyprland/hyprland-claude -- --option min-free 3000000000 --option max-free 5000000000";
     clean = "nh clean all";
     optimise = "nix-store --optimise";
     fetch = "fastfetch --config config.jsonc";
