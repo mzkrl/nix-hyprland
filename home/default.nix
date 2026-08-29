@@ -285,6 +285,7 @@ programs.fish = {
     cd = "z";
     ".." = "cd ..";
     update = "nh os switch /home/juang/Pictures/hyprland/hyprland-claude";
+    update-safe = "nh os switch /home/juang/Pictures/hyprland/hyprland-claude -- --option min-free 3000000000 --option max-free 5000000000";
     clean = "nh clean all";
     optimise = "nix-store --optimise";
     fetch = "fastfetch --config config.jsonc";
@@ -293,7 +294,7 @@ programs.fish = {
     power = "~/.local/bin/power-profile";
     performa = "~/.local/bin/power-profile set performa";
     hemat = "~/.local/bin/power-profile set hemat";
-    "ultra-hemat" = "~/.local/bin/power-profile set ultra-hemat";
+    ultra = "~/.local/bin/power-profile set ultra-hemat";
   };
 };
 
@@ -347,17 +348,15 @@ programs.fish = {
   # Startpage
   home.file.".config/startpage/index.html".source = ../configs/startpage/index.html;
 
-  # Firefox
-  programs.firefox = {
+  # Default Applications
+  xdg.mimeApps = {
     enable = true;
-    profiles.juang = {
-      isDefault = true;
-      userChrome = builtins.readFile ../configs/firefox/userChrome.css;
-      settings = {
-        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-        "browser.startup.homepage" = "file://${config.home.homeDirectory}/.config/startpage/index.html";
-        "browser.newtabpage.enabled" = false;
-      };
+    defaultApplications = {
+      "text/html" = "brave-browser.desktop";
+      "x-scheme-handler/http" = "brave-browser.desktop";
+      "x-scheme-handler/https" = "brave-browser.desktop";
+      "x-scheme-handler/about" = "brave-browser.desktop";
+      "x-scheme-handler/unknown" = "brave-browser.desktop";
     };
   };
   
