@@ -71,7 +71,8 @@
   nixpkgs.config.allowUnfree = true;
 
   # Hardware & Performance
-  hardware.enableAllFirmware = true;
+  hardware.enableAllFirmware = false;
+  hardware.enableRedistributableFirmware = true;
   services.fstrim.enable = true;
   zramSwap.enable = true;
   services.auto-cpufreq.enable = false; # Dimatikan karena konflik sama power-profiles-daemon
