@@ -20,7 +20,6 @@
 ### 🎨 **Modern Aesthetics**
 - **Hyprland** - Dynamic tiling Wayland compositor with stunning animations
 - **Anthropic Color Scheme** - Elegant dark theme with warm accents
-- **Waybar** - Beautiful, customizable status bar
 - **SwayNC** - Modern notification center with control widgets
 - **Fuzzel** - Fast and lightweight application launcher
 - **Custom Theming** - Consistent GTK, Qt, and terminal theming
@@ -65,7 +64,7 @@
 
 | Category | Tools |
 |----------|-------|
-| **Window Manager** | Hyprland, Waybar, SwayNC, Fuzzel |
+| **Window Manager** | Hyprland, SwayNC, Fuzzel |
 | **Terminal** | Kitty, Fish, Starship, Fastfetch |
 | **Browsers** | Firefox, Brave |
 | **Development** | Neovim, Git, Node.js, Bun, Direnv |
@@ -168,10 +167,6 @@ nix-hyprland/
 │   │   ├── hyprland.conf         # Hyprland main config
 │   │   ├── theme.conf            # Color scheme and styling
 │   │   └── hyprpaper.conf        # Wallpaper configuration
-│   ├── waybar/
-│   │   ├── config.jsonc          # Waybar modules
-│   │   ├── style.css             # Waybar styling
-│   │   └── colors.css            # Waybar color variables
 │   ├── swaync/
 │   │   ├── config.json           # Notification center config
 │   │   └── style.css             # Notification styling
@@ -190,10 +185,9 @@ nix-hyprland/
 
 The configuration uses Anthropic-inspired colors. To customize:
 
-1. **Terminal (Kitty)** - Edit `home/default.nix` lines 217-226
-2. **Fuzzel Launcher** - Edit `home/default.nix` lines 262-269
-3. **Waybar** - Edit `configs/waybar/colors.css`
-4. **Hyprland Theme** - Edit `configs/hypr/theme.conf`
+1. **Terminal (Kitty)** - Edit `home/default.nix`
+2. **Fuzzel Launcher** - Edit `home/default.nix`
+3. **Hyprland Theme** - Edit `configs/hypr/theme.conf`
 5. **SwayNC** - Edit `configs/swaync/style.css`
 
 ### Adding Packages
