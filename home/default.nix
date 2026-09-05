@@ -7,19 +7,71 @@
   home.homeDirectory = "/home/juang";
   home.stateVersion = "25.11";
 
-  # Caelestia Shell Configuration
+  # Caelestia Shell Configuration (full feature set)
   programs.caelestia = {
     enable = true;
-    package = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    # with-cli so `caelestia shell <ipc>` works from the shell service too
+    package = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.with-cli;
+    cli = {
+      enable = true; # Add `caelestia` CLI to PATH (wallpaper, screenshot, clipboard, emoji, shell IPC)
+      # Written to ~/.config/caelestia/cli.json (CLI config) — read by `caelestia record`
+      settings = {
+        # No VAAPI/NVENC encoder available on this GPU stack — fall back to CPU encoding
+        record = {
+          extraArgs = [ "-fallback-cpu-encoding" "yes" ];
+        };
+      };
+    };
     settings = {
       services = {
         useFahrenheit = false;
         useFahrenheitPerformance = false;
       };
       background = {
-        enabled = false; # Disable Caelestia background layer entirely — swaybg handles wallpaper
+        enabled = true;        # Caelestia handles the wallpaper itself
+        wallpaperEnabled = true;
       };
+      paths = {
+        wallpaperDir = "~/Pictures/Wallpapers";
+      };
+      general = {
+        apps = {
+          terminal = [ "kitty" ];
+          audio = [ "pavucontrol" ];
+          playback = [ "mpv" ];
+          explorer = [ "thunar" ];
+        };
+        # Idle management handled natively by Caelestia (replaces hypridle)
+        idle = {
+          lockBeforeSleep = true;
+          inhibitWhenAudio = true;
+          timeouts = [
+            { timeout = 300; idleAction = [ "brightnessctl" "-s" "set" "20%" ]; returnAction = [ "brightnessctl" "-r" ]; }
+            { timeout = 480; idleAction = "lock"; }
+            { timeout = 900; idleAction = [ "systemctl" "suspend-then-hibernate" ]; }
+          ];
+        };
+      };
+      bar = {
+        persistent = true;
+        clock = {
+          showDate = true;
+          showIcon = true;
+        };
+        statusIcons = [
+          { id = "lockStatus"; enabled = true; }
+          { id = "audio"; enabled = true; }
+          { id = "microphone"; enabled = false; }
+          { id = "kbLayout"; enabled = false; }
+          { id = "network"; enabled = true; }
+          { id = "bluetooth"; enabled = true; }
+          { id = "battery"; enabled = true; }
+        ];
+      };
+      # No VAAPI/NVENC encoder available on this GPU stack — fall back to CPU encoding
+      # (NB: `record.extraArgs` belongs in `cli.settings` for `caelestia record`, not here)
       launcher = {
+        enableDangerousActions = true;
         actions = [
           { name = "Calculator"; icon = "calculate"; description = "Do simple math equations"; command = [ "autocomplete" "calc" ]; enabled = true; dangerous = false; }
           { name = "Scheme"; icon = "palette"; description = "Change the current colour scheme"; command = [ "autocomplete" "scheme" ]; enabled = true; dangerous = false; }
@@ -33,7 +85,7 @@
           { name = "Logout"; icon = "exit_to_app"; description = "Log out of the current session"; command = [ "loginctl" "terminate-user" "" ]; enabled = true; dangerous = true; }
           { name = "Lock"; icon = "lock"; description = "Lock the current session"; command = [ "loginctl" "lock-session" ]; enabled = true; dangerous = false; }
           { name = "Sleep"; icon = "bedtime"; description = "Suspend then hibernate"; command = [ "systemctl" "suspend-then-hibernate" ]; enabled = true; dangerous = false; }
-          { name = "Settings"; icon = "settings"; description = "Configure the shell"; command = [ "caelestia" "shell" "controlCenter" "open" ]; enabled = true; dangerous = false; }
+          { name = "Settings"; icon = "settings"; description = "Configure the shell"; command = [ "caelestia" "shell" "nexus" "open" ]; enabled = true; dangerous = false; }
           { name = "Mode Performa"; icon = "rocket_launch"; description = "CPU: performance | GPU: ON"; command = [ "/home/juang/.local/bin/power-profile" "set" "performa" ]; enabled = true; dangerous = false; }
           { name = "Mode Balance"; icon = "balance"; description = "CPU: balanced | GPU: ON (offload)"; command = [ "/home/juang/.local/bin/power-profile" "set" "balance" ]; enabled = true; dangerous = false; }
           { name = "Mode Hemat"; icon = "energy_savings_leaf"; description = "CPU: power-saver | GPU: ON (low)"; command = [ "/home/juang/.local/bin/power-profile" "set" "hemat" ]; enabled = true; dangerous = false; }
@@ -45,15 +97,15 @@
   # User specific packages
   home.packages = with pkgs; [
     # --- Desktop Ricing & Compositor ---
-    swaybg                 # Wallpaper daemon
-    hypridle               # Idle daemon
-    swaynotificationcenter # SwayNC
-    networkmanagerapplet
-    blueman
-    kitty                  # Terminal
-    fuzzel                 # App Launcher
+    # Hyprland uses Caelestia Shell for the bar/launcher/nexus/notifs/lock/idle by default.
+    # swaybg / swaync / hyprlock / hypridle / wofi are replaced by Caelestia's own modules.
+    gpu-screen-recorder  # `caelestia record`
+    mpv                  # Video playback (Caelestia launcher `>playback`)
+    yt-dlp               # YouTube/streaming for mpv
+    fuzzel               # dependency for `caelestia clipboard` & `caelestia emoji`
+    kitty                # Terminal
 
-    # --- Clipboard & Screenshot ---
+    # --- Clipboard & Screenshot (used by `caelestia`) ---
     wl-clipboard
     cliphist
     grim
@@ -142,92 +194,9 @@
     enableFishIntegration = true;
   };
 
-  # Hyprlock Configuration (Declarative)
-  programs.hyprlock = {
-    enable = true;
-    settings = {
-      general = {
-        disable_loading_bar = false;
-        hide_cursor = true;
-        grace = 0;
-        no_fade_in = false;
-      };
-      background = [{
-        monitor = "";
-        path = "screenshot";
-        blur_passes = 3;
-        blur_size = 8;
-        brightness = 0.6;
-      }];
-      label = [
-        {
-          monitor = "";
-          text = "<b>$TIME</b>";
-          color = "rgb(faf9f5)";
-          font_size = 90;
-          font_family = "Poppins Bold";
-          position = "0, 80";
-          halign = "center";
-          valign = "center";
-        }
-      ];
-      input-field = [{
-        monitor = "";
-        size = "280, 50";
-        outline_thickness = 2;
-        outer_color = "rgb(d97757)";
-        inner_color = "rgba(20, 20, 19, 0.8)";
-        font_color = "rgb(faf9f5)";
-        check_color = "rgb(788c5d)";
-        fail_color = "rgb(d97757)";
-        placeholder_text = "<i>Password...</i>";
-        position = "0, -120";
-        halign = "center";
-        valign = "center";
-      }];
-    };
-  };
-
-  # Hypridle Configuration (Declarative)
-  services.hypridle = {
-    enable = true;
-    settings = {
-      general = {
-        lock_cmd = "pidof hyprlock || hyprlock";
-        before_sleep_cmd = "loginctl lock-session";
-        after_sleep_cmd = "hyprctl dispatch dpms on";
-      };
-      listener = [
-        {
-          timeout = 300;
-          on-timeout = "brightnessctl -s set 20%";
-          on-resume = "brightnessctl -r";
-        }
-        {
-          timeout = 480;
-          on-timeout = "loginctl lock-session";
-        }
-        {
-          timeout = 600;
-          on-timeout = "hyprctl dispatch dpms off";
-          on-resume = "hyprctl dispatch dpms on";
-        }
-      ];
-    };
-  };
-
-  # Wofi Configuration
-  programs.wofi = {
-    enable = true;
-    settings = {
-      allow_images = true;
-      width = "30%";
-      lines = 10;
-      location = "center";
-      prompt = "Search Apps...";
-      filter_rate = 100;
-    };
-  };
+  # Lock & idle management are handled natively by Caelestia Shell:
+  #  - Lock screen   -> Caelestia's PAM layer (no hyprlock)
+  #  - Idle timeouts -> shell.json `general.idle` (no hypridle)
 
   # Kitty Terminal Configuration
 programs.kitty = {
@@ -256,12 +225,10 @@ programs.kitty = {
   };
 };
 # ─── Home File (Deploy dotfiles) ──────────────────
-# Hyprpaper — wallpaper config
-home.file.".config/hypr/hyprpaper.conf".source = ../configs/hypr/hyprpaper.conf;
+# Caelestia Shell handles notifications/control center — swaync configs removed.
 
-# SwayNC — Control Center
-home.file.".config/swaync/config.json".source = ../configs/swaync/config.json;
-home.file.".config/swaync/style.css".source = ../configs/swaync/style.css;
+# Wallpaper for Caelestia's wallpaper switcher (launcher `>wallpaper`)
+home.file."Pictures/Wallpapers/wallpaper.png".source = ../wallpaper.png;
 
 # Fastfetch
 home.file.".config/fastfetch/config.jsonc".source = ../configs/fastfetch/config.jsonc;
@@ -276,34 +243,72 @@ home.file.".icons/kanade" = {
   recursive = true;
 };
 
-# Fuzzel App Launcher Config
-home.file.".config/fuzzel/fuzzel.ini".text = ''
-  [main]
-  font=JetBrainsMono Nerd Font:size=11
-  icon-theme=Papirus-Dark
-  terminal=kitty
-  lines=10
-  width=35
-  horizontal-pad=12
-  vertical-pad=8
-  inner-pad=4
-
-  [colors]
-  background=141413ff
-  text=faf9f5ff
-  match=d97757ff
-  selection=d9775722
-  selection-text=faf9f5ff
-  selection-match=d97757ff
-  border=d97757ff
-
-  [border]
-  width=2
-  radius=10
+# mpv — minimal themed config
+home.file.".config/mpv/mpv.conf".text = ''
+  hwdec=auto
+  vo=gpu-next
+  profile=gpu-hq
+  ytdl-format=bestvideo+bestaudio/best
+  sub-font="JetBrainsMono Nerd Font"
+  sub-color="faf9f5"
+  osd-color="faf9f5"
+  osd-border-color="141413"
+  osd-font="JetBrainsMono Nerd Font"
+  volume=60
 '';
 
-# Kitty Terminal Configuration
-# Fish Shell Configuration
+# Fuzzel — used by `caelestia clipboard` & `caelestia emoji` as the picker UI
+home.file.".config/fuzzel/fuzzel.ini" = {
+  text = ''
+    [main]
+    font=JetBrainsMono Nerd Font:size=11
+    icon-theme=Papirus-Dark
+    terminal=kitty
+    lines=10
+    width=35
+    horizontal-pad=12
+    vertical-pad=8
+    inner-pad=4
+
+    [colors]
+    background=141413ff
+    text=faf9f5ff
+    match=d97757ff
+    selection=d9775722
+    selection-text=faf9f5ff
+    selection-match=d97757ff
+    border=d97757ff
+
+    [border]
+    width=2
+    radius=10
+  '';
+  force = true; # overwrite any unmanaged existing fuzzel.ini
+};
+
+# HM's GTK module writes these; allow it to claim them even if an unmanaged
+# copy already exists
+xdg.configFile."gtk-4.0/gtk.css".force = true;
+xdg.configFile."gtk-3.0/gtk.css".force = true;
+
+# ─── Caelestia writable configs (so Nexus / CLI can save) ───────────
+# HM deploys shell.json & cli.json as read-only store symlinks, which makes
+# Nexus ("failed to save config") and `caelestia config set` break. Replace
+# them with real writable copies after every switch (Nexus edits then persist
+# until the next switch; declarative config wins on rebuild).
+home.activation.makeCaelestiaConfigsWritable = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+  for f in shell.json cli.json; do
+    target="$HOME/.config/caelestia/$f"
+    if [ -L "$target" ]; then
+      real="$(readlink -f "$target" || true)"
+      if [ -n "$real" ]; then
+        rm -f "$target"
+        cp -f "$real" "$target"
+        chmod 600 "$target"
+      fi
+    fi
+  done
+'';
 programs.fish = {
   enable = true;
   interactiveShellInit = ''
@@ -327,6 +332,11 @@ programs.fish = {
     performa = "~/.local/bin/power-profile set performa";
     hemat = "~/.local/bin/power-profile set hemat";
     ultra = "~/.local/bin/power-profile set ultra-hemat";
+    # Caelestia utilities
+    clip = "caelestia clipboard";
+    emoji = "caelestia emoji -p";
+    shot = "caelestia screenshot";
+    wallpaper = "caelestia wallpaper";
   };
 };
 
@@ -343,6 +353,24 @@ programs.fish = {
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
+    gtk3 = {
+      extraConfig = {
+        # Keep CSD/headerbar dark even when an app ignores the theme variant
+        "gtk-application-prefer-dark-theme" = 1;
+      };
+      # Thunar: force dark headerbar + readable light text (Anthropic palette)
+      extraCss = ''
+        headerbar, .titlebar, windowheader { background-color: #1d1d1c; color: #faf9f5; }
+        headerbar label, headerbar button { color: #faf9f5; }
+        window, .background, treeview, list { background-color: #141413; color: #faf9f5; }
+        button, entry, menubar, menu, .menu, .context-menu { background-color: #1d1d1c; color: #faf9f5; }
+      '';
+    };
+    gtk4.extraCss = ''
+      headerbar, .titlebar { background-color: #1d1d1c; color: #faf9f5; }
+      window, .background { background-color: #141413; color: #faf9f5; }
+      button, entry { background-color: #1d1d1c; color: #faf9f5; }
+    '';
 #    cursorTheme = {
 #      name = "Adwaita";
 #      package = pkgs.adwaita-icon-theme;
