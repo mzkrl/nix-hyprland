@@ -32,11 +32,11 @@
         "quickshell": "quickshell"
       },
       "locked": {
-        "lastModified": 1788345123,
-        "narHash": "sha256-cIsKqL6nUAVHtMcMePf+iQOhkyIhLYR47XtcZpeSTXI=",
+        "lastModified": 1788577915,
+        "narHash": "sha256-FspYP5RfTFHfuWDrZDNK9H4CIsDn3zPh/LM5viGJ8so=",
         "owner": "caelestia-dots",
         "repo": "shell",
-        "rev": "750e67d93ac12b264cb8cbc3a1f2b8f429c923c2",
+        "rev": "ee4a7b9e90e0d4a18b6e3ff8dab0478b68e4efb8",
         "type": "github"
       },
       "original": {
@@ -106,11 +106,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1788297115,
-        "narHash": "sha256-Z+vUNbfd2FIKkWOTkcT7RYlh3oFCnig/d2eXD1SWf2E=",
+        "lastModified": 1788405554,
+        "narHash": "sha256-r2f1oUwixlgq9zOdYLqJLfS/lWBT60/IITjhTKI59JU=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "a3116115851d68b8952a2a4221cc25a84e56b532",
+        "rev": "a5cc6f2c37bf518436dc8d1c288ccd0c43c2f4c4",
         "type": "github"
       },
       "original": {
