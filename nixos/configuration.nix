@@ -81,23 +81,30 @@
 
   # Nix Settings
   nix.settings = {
-    auto-optimise-store = true; # <==== TAMBAHKAN INI
-    experimental-features = [ "nix-command" "flakes" ];
-    substituters = [
-      "https://cache.nixos.org"
-      "https://hyprland.cachix.org"
-    ];
-    trusted-public-keys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-    ];
-  };
+  auto-optimise-store = true;
+
+  # Trigger GC earlier when free space gets low.
+  min-free = 4 * 1024 * 1024 * 1024;
+  max-free = 8 * 1024 * 1024 * 1024;
+
+  experimental-features = [ "nix-command" "flakes" ];
+
+  substituters = [
+    "https://cache.nixos.org"
+    "https://hyprland.cachix.org"
+  ];
+
+  trusted-public-keys = [
+    "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+    "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+  ];
+};
 
 # NH Configuration
 programs.nh = {
   enable = true;
   clean.enable = true;
-  clean.extraArgs = "--keep-since 4d --keep 3";
+  clean.extraArgs = "--keep-since 7d --keep 3";
   flake = "/home/juang/Pictures/hyprland/hyprland-claude";
 };
 
@@ -127,7 +134,7 @@ environment.systemPackages = with pkgs; [
   libnotify
 
   # --- Main Applications ---
-  brave discord antigravity-ide thunar tailscale #zed-editor #vscode #steam
+  brave discord antigravity thunar tailscale #zed-editor #vscode #steam
 ];
 
   # Fonts configuration

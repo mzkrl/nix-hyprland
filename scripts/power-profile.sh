@@ -97,8 +97,6 @@ apply_profile() {
     esac
 
     echo "$mode" > "$STATE_FILE"
-    # Signal waybar to refresh power-profile module instantly
-    pkill -RTMIN+8 waybar 2>/dev/null || true
 }
 
 # Cycle to the next profile
@@ -112,43 +110,6 @@ cycle() {
         ultra-hemat)  apply_profile "performa" ;;
         *)            apply_profile "balance" ;;
     esac
-}
-
-# Waybar output (JSON)
-waybar_output() {
-    local current icon tooltip css_class
-    current="$(get_current)"
-    case "$current" in
-        performa)
-            icon="⚡"
-            tooltip="Mode Performa\nCPU: performance | GPU: ON"
-            css_class="performance"
-            ;;
-        balance)
-            icon="⚖️"
-            tooltip="Mode Balance\nCPU: balanced | GPU: ON (offload)"
-            css_class="balanced"
-            ;;
-        hemat)
-            icon="🔋"
-            tooltip="Mode Hemat\nCPU: power-saver | GPU: ON (low)"
-            css_class="powersaver"
-            ;;
-        ultra-hemat)
-            icon="🪫"
-            tooltip="Mode Ultra Hemat\nCPU: power-saver | GPU: OFF"
-            css_class="ultrasaver"
-            ;;
-        *)
-            icon="⚖️"
-            tooltip="Unknown"
-            css_class="balanced"
-            ;;
-    esac
-
-    # Escape for JSON
-    tooltip="${tooltip//$'\n'/\\n}"
-    echo "{\"text\": \"$icon\", \"tooltip\": \"$tooltip\", \"class\": \"$css_class\"}"
 }
 
 # Menu selection via fuzzel
@@ -168,10 +129,9 @@ case "${1:-}" in
     set)       apply_profile "$2" ;;
     cycle)     cycle ;;
     get)       get_current ;;
-    waybar)    waybar_output ;;
     menu)      menu ;;
     *)
-        echo "Usage: power-profile.sh {set <mode>|cycle|get|waybar|menu}"
+        echo "Usage: power-profile.sh {set <mode>|cycle|get|menu}"
         echo "Modes: performa, balance, hemat, ultra-hemat"
         exit 1
         ;;

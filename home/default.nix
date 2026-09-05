@@ -10,7 +10,7 @@
   # Caelestia Shell Configuration
   programs.caelestia = {
     enable = true;
-    package = inputs.caelestia-shell.packages.${pkgs.system}.default;
+    package = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.default;
     settings = {
       services = {
         useFahrenheit = false;
@@ -47,7 +47,6 @@
     # --- Desktop Ricing & Compositor ---
     swaybg                 # Wallpaper daemon
     hypridle               # Idle daemon
-    waybar                 # Fallback panel
     swaynotificationcenter # SwayNC
     networkmanagerapplet
     blueman
@@ -96,12 +95,15 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+    withPython3 = false; # Match new HM default (no embedded Python)
+    withRuby = false;    # Match new HM default (no embedded Ruby)
   };
 
   # XDG
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
+    setSessionVariables = false; # Match new HM default
   };
 
   # Btop Configuration
@@ -257,11 +259,6 @@ programs.kitty = {
 # Hyprpaper — wallpaper config
 home.file.".config/hypr/hyprpaper.conf".source = ../configs/hypr/hyprpaper.conf;
 
-# Waybar — fallback panel
-home.file.".config/waybar/config.jsonc".source = ../configs/waybar/config.jsonc;
-home.file.".config/waybar/style.css".source = ../configs/waybar/style.css;
-home.file.".config/waybar/colors.css".source = ../configs/waybar/colors.css;
-
 # SwayNC — Control Center
 home.file.".config/swaync/config.json".source = ../configs/swaync/config.json;
 home.file.".config/swaync/style.css".source = ../configs/swaync/style.css;
@@ -341,6 +338,7 @@ programs.fish = {
       name = "Adwaita-dark";
       package = pkgs.gnome-themes-extra;
     };
+    gtk4.theme = config.gtk.theme; # Keep Adwaita-dark for GTK4 (previously the implicit default)
     iconTheme = {
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
@@ -378,6 +376,9 @@ programs.fish = {
     # ];
     
     extraConfig = builtins.readFile ../configs/hypr/hyprland.conf;
+    # Pin old format until config is migrated to 0.55's Lua (hyprland.lua).
+    # Hyprland upstream will drop hyprlang support in a future release.
+    configType = "hyprlang";
   };
 
   # Startpage
