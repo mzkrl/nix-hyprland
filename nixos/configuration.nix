@@ -76,6 +76,7 @@
   services.fstrim.enable = true;
   zramSwap.enable = true;
   services.auto-cpufreq.enable = false; # Dimatikan karena konflik sama power-profiles-daemon
+  services.upower.enable = true; # battery widget
   services.power-profiles-daemon.enable = true;
   services.flatpak.enable = true;
 
