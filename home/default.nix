@@ -340,7 +340,11 @@ programs.fish = {
     #   inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
     # ];
     
-    extraConfig = builtins.readFile ../configs/hypr/hyprland.conf;
+    extraConfig = builtins.readFile ../configs/hypr/hyprland.conf + ''
+      # Inject QML import paths into every process Hyprland spawns (qs, keybinds).
+      # home.sessionVariables only reaches login shells, not Hyprland children.
+      env = QML_IMPORT_PATH, ${inputs.qt6-cava-plugin.packages.${pkgs.stdenv.hostPlatform.system}.default}/lib/qt6/qml:${pkgs.qt6.qtmultimedia}/lib/qt-6/qml
+    '';
     # Pin old format until config is migrated to 0.55's Lua (hyprland.lua).
     # Hyprland upstream will drop hyprlang support in a future release.
     configType = "hyprlang";
