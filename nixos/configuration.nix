@@ -80,7 +80,7 @@
 
   # Nix Settings
   nix.settings = {
-    auto-optimise-store = true; # <==== TAMBAHKAN INI
+    auto-optimise-store = true;
     experimental-features = [ "nix-command" "flakes" ];
     substituters = [
       "https://cache.nixos.org"
@@ -137,6 +137,11 @@ environment.systemPackages = with pkgs; [
     poppins
     noto-fonts
     noto-fonts-color-emoji
+    # Fonts required by the Persona Quickshell rice
+    montserrat                  # "Montserrat (Light)" in QML
+    proggyfonts
+    material-symbols            # "Material Symbols Rounded" in QML
+    noto-fonts-cjk-sans         # Stand-in for "Microsoft Yahei" in QML
   ];
 
   # Desktop Environment (System Level)
