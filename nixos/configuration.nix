@@ -76,6 +76,7 @@
   zramSwap.enable = true;
   services.auto-cpufreq.enable = false; # Dimatikan karena konflik sama power-profiles-daemon
   services.power-profiles-daemon.enable = true;
+  services.upower.enable = true; # Required by Persona shell's battery widget (UPower D-Bus)
   services.flatpak.enable = true;
 
   # Nix Settings
