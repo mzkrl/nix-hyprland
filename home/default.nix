@@ -10,7 +10,7 @@
   # Caelestia Shell Configuration
   programs.caelestia = {
     enable = true;
-    package = inputs.caelestia-shell.packages.${pkgs.system}.default;
+    package = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.default;
     settings = {
       services = {
         useFahrenheit = false;
@@ -95,12 +95,15 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+    withPython3 = false; # Match new HM default (no embedded Python)
+    withRuby = false;    # Match new HM default (no embedded Ruby)
   };
 
   # XDG
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
+    setSessionVariables = false; # Match new HM default
   };
 
   # Btop Configuration
@@ -335,6 +338,7 @@ programs.fish = {
       name = "Adwaita-dark";
       package = pkgs.gnome-themes-extra;
     };
+    gtk4.theme = config.gtk.theme; # Keep Adwaita-dark for GTK4 (previously the implicit default)
     iconTheme = {
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
@@ -372,6 +376,9 @@ programs.fish = {
     # ];
     
     extraConfig = builtins.readFile ../configs/hypr/hyprland.conf;
+    # Pin old format until config is migrated to 0.55's Lua (hyprland.lua).
+    # Hyprland upstream will drop hyprlang support in a future release.
+    configType = "hyprlang";
   };
 
   # Startpage
