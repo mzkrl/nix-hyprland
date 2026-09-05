@@ -13,6 +13,7 @@
 
     quickshell = {
       url = "github:outfoxxed/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     qt6-cava-plugin = {
