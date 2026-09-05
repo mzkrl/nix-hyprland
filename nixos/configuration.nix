@@ -118,7 +118,7 @@ environment.systemPackages = with pkgs; [
   wget curl git gh glab jq python3
   killall pciutils iproute2 procps
   bat htop btop eza fastfetch 
-  php php84Packages.composer #aih najis selesai uprak apus
+  # php php84Packages.composer #aih najis selesai uprak apus
   
   # --- Hardware & Disk Utilities ---
   gparted baobab wlr-randr
@@ -126,7 +126,7 @@ environment.systemPackages = with pkgs; [
   libnotify
 
   # --- Main Applications ---
-  brave discord antigravity zed-editor thunar cider tailscale vscode #steam
+  brave discord antigravity thunar tailscale #steam zed-editor vscode
 ];
 
   # Fonts configuration
