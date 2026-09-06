@@ -300,6 +300,9 @@ home.file.".config/fuzzel/fuzzel.ini" = {
 # them with real writable copies after every switch (Nexus edits then persist
 # until the next switch; declarative config wins on rebuild).
 home.activation.makeCaelestiaConfigsWritable = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+  # Drop stale backups so HM's next linkGeneration backup step never clobbers
+  # (its "would be clobbered" check is fatal).
+  rm -f "$HOME/.config/caelestia/shell.json.backup" "$HOME/.config/caelestia/cli.json.backup"
   for f in shell.json cli.json; do
     target="$HOME/.config/caelestia/$f"
     if [ -L "$target" ]; then
@@ -312,6 +315,11 @@ home.activation.makeCaelestiaConfigsWritable = lib.hm.dag.entryAfter [ "linkGene
     fi
   done
 '';
+
+# HM's GTK module generates gtk-4.0/gtk.css from `gtk.gtk4.theme` (dark import).
+# force keeps it overwriting any manually dropped copies so the white-flash
+# theme never comes back.
+xdg.configFile."gtk-4.0/gtk.css".force = true;
 programs.fish = {
   enable = true;
   interactiveShellInit = ''
