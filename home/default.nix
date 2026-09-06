@@ -102,6 +102,14 @@
     gpu-screen-recorder  # `caelestia record`
     mpv                  # Video playback (Caelestia launcher `>playback`)
     yt-dlp               # YouTube/streaming for mpv
+
+    # Brave: wrapper disables HW video decode. Decoding happens on the NVIDIA
+    # NVDEC (via nvidia-vaapi-driver) but Brave renders on the Intel iGPU, and
+    # the cross-GPU DMABUF import fails (eglCreateImage 0x3009 flood) -> glitchy
+    # video. Software decode matches the YouTube path, which already works fine.
+    (writeShellScriptBin "brave" ''
+      exec ${pkgs.brave}/bin/brave --disable-features=AcceleratedVideoDecodeLinuxGL "$@"
+    '')
     fuzzel               # dependency for `caelestia clipboard` & `caelestia emoji`
     kitty                # Terminal
 
@@ -286,11 +294,6 @@ home.file.".config/fuzzel/fuzzel.ini" = {
   force = true; # overwrite any unmanaged existing fuzzel.ini
 };
 
-# HM's GTK module writes these; allow it to claim them even if an unmanaged
-# copy already exists
-xdg.configFile."gtk-4.0/gtk.css".force = true;
-xdg.configFile."gtk-3.0/gtk.css".force = true;
-
 # ─── Caelestia writable configs (so Nexus / CLI can save) ───────────
 # HM deploys shell.json & cli.json as read-only store symlinks, which makes
 # Nexus ("failed to save config") and `caelestia config set` break. Replace
@@ -362,19 +365,7 @@ programs.fish = {
         # Keep CSD/headerbar dark even when an app ignores the theme variant
         "gtk-application-prefer-dark-theme" = 1;
       };
-      # Thunar: force dark headerbar + readable light text (Anthropic palette)
-      extraCss = ''
-        headerbar, .titlebar, windowheader { background-color: #1d1d1c; color: #faf9f5; }
-        headerbar label, headerbar button { color: #faf9f5; }
-        window, .background, treeview, list { background-color: #141413; color: #faf9f5; }
-        button, entry, menubar, menu, .menu, .context-menu { background-color: #1d1d1c; color: #faf9f5; }
-      '';
     };
-    gtk4.extraCss = ''
-      headerbar, .titlebar { background-color: #1d1d1c; color: #faf9f5; }
-      window, .background { background-color: #141413; color: #faf9f5; }
-      button, entry { background-color: #1d1d1c; color: #faf9f5; }
-    '';
 #    cursorTheme = {
 #      name = "Adwaita";
 #      package = pkgs.adwaita-icon-theme;
