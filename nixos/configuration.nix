@@ -199,6 +199,14 @@ environment.systemPackages = with pkgs; [
   xdg.portal = {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
+    # Route the Settings backend to portal-gtk so GTK4/libadwaita apps (baobab)
+    # receive the dark color-scheme (XDP 1.20 core ships no Settings impl of its
+    # own, and without this config portal-gtk only auto-activates for GNOME/XFCE).
+    config.hyprland = {
+      default = "hyprland;gtk";
+      "org.freedesktop.impl.portal.Settings" = "gtk";
+      "org.freedesktop.impl.portal.FileChooser" = "gtk";
+    };
   };
 
   security.polkit.enable = true;
