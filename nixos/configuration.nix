@@ -124,7 +124,7 @@ environment.systemPackages = with pkgs; [
   tuigreet              # Login manager
   
   # --- General Utilities & CLI Basics ---
-  wget curl git gh glab jq python3
+  wget curl git gh glab jq python3 uv
   killall pciutils iproute2 procps
   bat htop btop eza fastfetch 
   #php php84Packages.composer #aih najis selesai uprak apus
@@ -133,6 +133,7 @@ environment.systemPackages = with pkgs; [
   gparted baobab wlr-randr
   pavucontrol brightnessctl playerctl
   libnotify
+  nvidia-vaapi-driver # VAAPI -> VDPAU/NVDEC bridge for HW video decode (Brave etc.)
 
   # --- Main Applications ---
   brave discord antigravity thunar tailscale #zed-editor #vscode #steam
@@ -160,6 +161,7 @@ environment.systemPackages = with pkgs; [
     NIXOS_OZONE_WL = "1";
     WLR_NO_HARDWARE_CURSORS = "1";
     LIBVA_DRIVER_NAME = "nvidia";
+    LIBVA_DRIVERS_PATH = "${pkgs.nvidia-vaapi-driver}/lib/dri";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
   };
