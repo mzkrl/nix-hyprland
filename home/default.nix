@@ -344,6 +344,10 @@ programs.fish = {
 # GTK Theme Configuration
   gtk = {
     enable = true;
+    # Makes GTK4/libadwaita apps (baobab, etc.) dark: writes
+    # gtk-application-prefer-dark-theme in gtk-3.0 & gtk-4.0 settings.ini,
+    # which xdg-desktop-portal-gtk also reports to libadwaita apps.
+    colorScheme = "dark";
     theme = {
       name = "Adwaita-dark";
       package = pkgs.gnome-themes-extra;
@@ -408,9 +412,6 @@ programs.fish = {
     # Hyprland upstream will drop hyprlang support in a future release.
     configType = "hyprlang";
   };
-
-  # Startpage
-  home.file.".config/startpage/index.html".source = ../configs/startpage/index.html;
 
   # Default Applications
   xdg.mimeApps = {
