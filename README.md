@@ -1,414 +1,181 @@
-<div align="center">
+# nix-hyprland
 
-# 🚀 NixOS Hyprland Configuration
+This is the complete configuration of one NixOS laptop: the kernel parameters, the login screen, the compositor, the shell, the cursor, and the alias that makes `update` do what it says. Everything is declared in a flake, so the machine can be rebuilt from this repository and a bit of patience, which is the whole appeal of Nix and also its main hobby.
 
-<img src="https://img.shields.io/badge/NixOS-unstable-blue?style=for-the-badge&logo=nixos&logoColor=white" alt="NixOS">
-<img src="https://img.shields.io/badge/Hyprland-Wayland-teal?style=for-the-badge&logo=wayland&logoColor=white" alt="Hyprland">
-<img src="https://img.shields.io/badge/NVIDIA-PRIME-76B900?style=for-the-badge&logo=nvidia&logoColor=white" alt="NVIDIA">
-<img src="https://img.shields.io/badge/Home_Manager-enabled-orange?style=for-the-badge&logo=homeassistant&logoColor=white" alt="Home Manager">
+The desktop is Hyprland with [Caelestia Shell](https://github.com/caelestia-dots/shell) doing the heavy lifting. Caelestia supplies the bar, launcher, dashboard, notifications, lock screen, idle handling, wallpaper, and a control center called Nexus, which retired a small crowd of separate programs (swaync, hypridle, hyprlock, and friends) in one go. The colours come from a warm charcoal-and-orange palette, applied consistently enough that even the terminal, launcher and window borders look like they were introduced to each other.
 
-**A modern, declarative NixOS desktop configuration featuring Hyprland compositor with NVIDIA PRIME support**
+The setup is built around a hybrid Intel and NVIDIA laptop, and it shows. If your machine is the same shape, most of this will transplant cleanly. If not, you will still find plenty to borrow, and the section on making it yours lists what to change.
 
-[Features](#-features) • [Installation](#-installation) • [Structure](#-project-structure) • [Customization](#-customization) • [Keybindings](#-keybindings)
+## What is inside
 
----
+| Area | Choice |
+| --- | --- |
+| Base | NixOS 26.05 (`nixos-26.05`), flakes, Home Manager `release-26.05` |
+| Compositor | Hyprland, configured in classic hyprlang syntax |
+| Shell | Caelestia Shell with its CLI (`caelestia`) |
+| Login | greetd with tuigreet |
+| Terminal and shell | Kitty, fish, Starship, zoxide, direnv |
+| Editor | Neovim |
+| Browser | Brave, plus a wrapper that keeps hardware video decode from misbehaving (see below) |
+| Files and media | Thunar, mpv, yt-dlp |
+| Graphics | Intel iGPU for the desktop, NVIDIA proprietary driver with PRIME offload |
+| Audio | PipeWire with PulseAudio, ALSA and JACK compatibility |
+| Theme | Adwaita-dark, Papirus-Dark icons, a custom `kanade` cursor theme, JetBrainsMono Nerd Font |
+| Housekeeping | `nh`, `nix-output-monitor`, `nvd`, automatic store optimisation and garbage collection |
 
-</div>
+Some smaller touches are worth a mention. The display runs at 10-bit colour with Hyprland's colour management enabled, so HDR content can pass through. Kitty swallows the programs launched from it. The bar is persistent, idle handling dims the screen, then locks, then suspends, and the lid switch locks the session on close.
 
-## ✨ Features
+## Hardware assumptions
 
-### 🎨 **Modern Aesthetics**
-- **Hyprland** - Dynamic tiling Wayland compositor with stunning animations
-- **Anthropic Color Scheme** - Elegant dark theme with warm accents
-- **Waybar** - Beautiful, customizable status bar
-- **SwayNC** - Modern notification center with control widgets
-- **Fuzzel** - Fast and lightweight application launcher
-- **Custom Theming** - Consistent GTK, Qt, and terminal theming
+The configuration was written for a laptop with an Intel iGPU, an NVIDIA RTX 2050, UEFI boot, and a dual-boot arrangement with Windows and Ubuntu. Several files reflect that directly:
 
-### ⚡ **Performance & Hardware**
-- **NVIDIA PRIME** - Optimized hybrid graphics (Intel iGPU + NVIDIA dGPU)
-- **Latest Kernel** - Using modern Linux kernel with optimizations
-- **Hardware Acceleration** - Full VA-API and NVENC support
-- **Power Management** - Multiple power profiles (performance, balanced, power-saver)
-- **Zram Swap** - Compressed memory for better performance
-- **Automatic TRIM** - SSD optimization enabled
+- `nixos/configuration.nix` sets the PRIME bus IDs (`PCI:0:2:0` for Intel, `PCI:1:0:0` for NVIDIA), forces the SOF audio driver for the Intel audio hardware, and loads early modules for the touchpad and sound.
+- The bootloader is GRUB in EFI mode with os-prober, so other operating systems show up in the menu.
+- Two extra filesystems, `/mnt/windows` (NTFS) and `/mnt/ubuntu` (ext4), are mounted by UUID.
+- The `nvidia-offload` command is installed system-wide for sending a program to the discrete GPU.
 
-### 🛠️ **Development Tools**
-- **Neovim** - Modern, extensible text editor
-- **Modern CLI Suite** - eza, zoxide, fzf, ripgrep, fd, bat
-- **Fish Shell** - User-friendly shell with smart autocompletions
-- **Starship Prompt** - Fast, customizable prompt
-- **Direnv** - Automatic environment management
-- **Git Tools** - gh (GitHub), glab (GitLab) CLI tools
-- **Node.js & Bun** - Latest JavaScript runtimes
+## Making it yours
 
-### 🎯 **Desktop Utilities**
-- **Hyprlock** - Beautiful lockscreen with blur effects
-- **Hypridle** - Intelligent idle management
-- **Hyprpaper** - Wallpaper daemon
-- **Btop** - Resource monitor with gorgeous UI
-- **Cliphist** - Clipboard history manager
-- **Grim + Slurp + Swappy** - Screenshot and annotation tools
-- **Thunar** - Lightweight file manager with plugins
+Nothing here is difficult, but a few values are personal and need replacing before a first build. Two `grep` commands find most of them.
 
-### 🔧 **System Features**
-- **Flakes** - Reproducible, declarative system configuration
-- **Home Manager** - User-level package and dotfile management
-- **NH** - Nix Helper for easier system management
-- **Automatic Cleanup** - Keep last 3 generations, 4 days
-- **Cachix Integration** - Fast binary cache for Hyprland
-- **GRUB Bootloader** - With OS detection for dual-boot setups
+1. **Clone the repository** somewhere you will keep it.
 
----
-
-## 📦 What's Included
-
-| Category | Tools |
-|----------|-------|
-| **Window Manager** | Hyprland, Waybar, SwayNC, Fuzzel |
-| **Terminal** | Kitty, Fish, Starship, Fastfetch |
-| **Browsers** | Firefox, Brave |
-| **Development** | Neovim, Git, Node.js, Bun, Direnv |
-| **Media** | PipeWire, Pavucontrol, Playerctl |
-| **Themes** | Adwaita Dark, Papirus Icons |
-| **Utilities** | Btop, Thunar, Cliphist, NetworkManager |
-
----
-
-## 🚀 Installation
-
-### Prerequisites
-- A working NixOS installation (or ready to install)
-- UEFI boot system
-- Basic understanding of Nix and NixOS
-
-### Quick Start
-
-1. **Clone this repository**
    ```bash
    git clone https://github.com/mzkrl/nix-hyprland.git
    cd nix-hyprland
    ```
 
-2. **Edit hardware configuration**
+2. **Generate your own hardware configuration.** The one in the repository describes someone else's disks.
+
    ```bash
-   # Generate your hardware config
    sudo nixos-generate-config --show-hardware-config > nixos/hardware-configuration.nix
    ```
 
-3. **Update system-specific settings**
+3. **Replace the username.** The user is called `juang`, and the name appears in several places. Run `grep -rn juang .` to see them all. The main ones are `users.users.juang` and the greetd session user in `nixos/configuration.nix`, `home-manager.users.juang` in `flake.nix`, and the username, home directory, launcher entries and aliases in `home/default.nix`.
 
-   Edit `nixos/configuration.nix`:
-   - Change hostname (line 44)
-   - Update username from `juang` to your username (line 62)
-   - Adjust timezone (line 50)
-   - Update NVIDIA PRIME bus IDs if needed (lines 256-257)
-     ```bash
-     # Find your GPU bus IDs
-     lspci | grep -E "VGA|3D"
-     ```
+4. **Replace the checkout path.** The repository is expected to live at `/home/juang/Pictures/hyprland/hyprland-claude`, and that path is written into `programs.nh.flake`, the `update` aliases, the wallpaper command in `hyprland.conf`, and the line at the top of `hyprland.conf` that sources `theme.conf`. `grep -rn hyprland-claude .` finds them.
 
-4. **Update flake configuration**
+5. **Check the GPU section.** Run `lspci | grep -E "VGA|3D"` and compare the bus IDs against the ones in `nixos/configuration.nix`. Without an NVIDIA GPU, remove the `hardware.nvidia` block and the NVIDIA environment variables in `configuration.nix`, `home/default.nix` and `hyprland.conf`.
 
-   Edit `flake.nix`:
-   - Change username in line 32 and 38 from `juang` to yours
-   - Update hostname in line 22 if changed
+6. **Deal with the extra mounts.** The `/mnt/windows` and `/mnt/ubuntu` entries use UUIDs from the original machine. A filesystem that does not exist can stall the boot, so delete these entries or point them at your own partitions. Adding `nofail` to the options is a kind precaution.
 
-5. **Update Home Manager paths**
+7. **Choose a bootloader.** GRUB with os-prober suits a dual-boot machine. On a single-OS system, systemd-boot is simpler.
 
-   Edit `home/default.nix`:
-   - Change username (line 6)
-   - Update home directory (line 7)
+8. **Build.** The flake output is named `nixos`, matching the hostname.
 
-6. **Update NH configuration path**
-
-   Edit `nixos/configuration.nix` line 99:
-   ```nix
-   flake = "/path/to/your/nix-hyprland";
-   ```
-
-7. **Build and switch**
    ```bash
-   # Initial installation (from NixOS installer or existing system)
    sudo nixos-rebuild switch --flake .#nixos
-
-   # Or use NH helper (after first installation)
-   nh os switch
    ```
 
-8. **Reboot and enjoy!**
-   ```bash
-   sudo reboot
-   ```
+   Once the system is up, `nh os switch` (or the `update` alias) takes over.
 
-### Post-Installation
+Timezone (`Asia/Jakarta`), locale and keyboard layout live in the same file and are easy to change.
 
-After first boot:
+## Daily use
 
-1. **Set wallpaper** - Place your wallpaper and update `configs/hypr/hyprpaper.conf`
-2. **Configure display** - Adjust monitor settings in `configs/hypr/hyprland.conf`
-3. **Test NVIDIA offload** - Run GPU-intensive apps with `nvidia-offload <command>`
-4. **Check power profile** - Use `power` command to see/change power modes
+### Shell aliases
 
----
+These are defined in `home/default.nix` for fish.
 
-## 📁 Project Structure
+| Alias | What it does |
+| --- | --- |
+| `update` | Rebuilds the system with `nh os switch` |
+| `update-safe` | The same rebuild, with tighter free-space limits for when the disk is nervous |
+| `clean` | `nh clean all`, which removes old generations |
+| `optimise` | Deduplicates the Nix store |
+| `ls`, `ll`, `la` | `eza` with icons and directories first |
+| `cat` | `bat` |
+| `cd` | `zoxide`, so `cd proj` goes where you meant |
+| `fetch` | Fastfetch with the custom config |
+| `power`, `performa`, `hemat`, `ultra` | Power profile controls (next section) |
+| `clip`, `emoji`, `shot`, `wallpaper` | Shortcuts to the matching `caelestia` subcommands |
+
+### Power profiles
+
+`scripts/power-profile.sh` is installed as `~/.local/bin/power-profile` and offers four modes. Each one sets the system power profile through power-profiles-daemon, adjusts Hyprland's animations, blur and shadows to match, and decides what the NVIDIA GPU is allowed to do. The notifications are partly in Indonesian, as the mode names suggest.
+
+| Mode | CPU | Effects | NVIDIA GPU |
+| --- | --- | --- | --- |
+| `performa` | performance | full | on |
+| `balance` | balanced | full | on (offload) |
+| `hemat` | power-saver | reduced shadows | on |
+| `ultra-hemat` | power-saver | animations and blur off | off |
+
+`power-profile cycle` steps through the modes, `power-profile menu` opens a picker, and `power-profile get` reports the current one. The same four modes also appear in the Caelestia launcher. The GPU switching uses `sudo` to write to sysfs and unload the NVIDIA kernel modules, so expect it to want your privileges.
+
+### Keybindings
+
+`SUPER` is the main modifier. The complete list is in `configs/hypr/hyprland.conf`, and the ones below cover most days.
+
+| Keys | Action |
+| --- | --- |
+| `SUPER + Q` | Terminal (add `ALT` to run it on the NVIDIA GPU) |
+| `SUPER + B` | Browser (add `ALT` for the NVIDIA GPU) |
+| `SUPER + E` | File manager |
+| `SUPER + R` | Caelestia launcher |
+| `SUPER + D` | Dashboard |
+| `SUPER + SHIFT + D` | Sidebar |
+| `SUPER + N` | Nexus control center |
+| `SUPER + M` | Session menu (logout, reboot, shutdown) |
+| `SUPER + C` | Close window |
+| `SUPER + V` | Toggle floating |
+| `SUPER + F` / `SUPER + SHIFT + F` | Fullscreen / maximise |
+| `SUPER + T` | Pin window |
+| `SUPER + G` | Toggle window group |
+| `SUPER + H J K L` | Move focus |
+| `SUPER + SHIFT + H J K L` | Swap windows |
+| `SUPER + ALT + H J K L` | Resize windows |
+| `SUPER + 1` to `0` | Go to workspace |
+| `SUPER + SHIFT + 1` to `0` | Send window to workspace |
+| `SUPER + CTRL + ← →` or `SUPER + [ ]` | Previous and next workspace |
+| `SUPER + S` | Scratchpad workspace |
+| `SUPER + grave` (the key above Tab) | Clipboard history |
+| `SUPER + SHIFT + grave` | Emoji picker |
+| `SUPER + SHIFT + P` | Colour picker |
+| `Print` / `SHIFT + Print` / `CTRL + Print` | Screenshot: full screen, region, region to clipboard |
+| `SUPER + SHIFT + R` / `SUPER + SHIFT + E` | Screen recording, without and with audio |
+| `SUPER + F5` / `SUPER + SHIFT + F5` | Cycle power profile / open the profile menu |
+| `SUPER + CTRL + SHIFT + R` | Restart Caelestia Shell |
+| `ALT + Tab` | Cycle windows |
+| `SUPER + mouse` | Left button moves, right button resizes |
+
+Volume, brightness and media keys work as expected, and Caelestia draws the on-screen display for them.
+
+## Quirks worth knowing about
+
+- **Two bindings share `SUPER + L`.** It is bound both to "focus right" and to the Caelestia lock screen. Hyprland accepts both without complaint, which makes the outcome a matter of suspense. `CTRL + ALT + L` locks unambiguously.
+- **Brave is wrapped.** Video is decoded on the NVIDIA GPU while Brave renders on the Intel one, and the hand-off between them produced a flood of EGL errors and glitchy playback. The wrapper in `home/default.nix` turns off accelerated video decode, and the glitches went with it.
+- **Caelestia config is writable on purpose.** Home Manager normally links `shell.json` and `cli.json` as read-only files, which stops Nexus from saving anything. A small activation script swaps the links for real copies after each switch. Edits made in Nexus persist until the next rebuild, at which point the declarative config wins.
+- **Hyprland config is pinned to hyprlang.** Upstream is moving toward Lua configuration, and `configType = "hyprlang"` keeps the current file working until this repository migrates.
+- **`scripts/apply.sh` is retired.** It predates `nh`, and the `update` alias replaced it.
+
+## Layout
 
 ```
-nix-hyprland/
-├── flake.nix                      # Main flake configuration
-├── flake.lock                     # Locked dependencies
+.
+├── flake.nix                       # inputs (nixpkgs, home-manager, caelestia-shell) and the nixos output
+├── flake.lock
 ├── nixos/
-│   ├── configuration.nix          # System-level NixOS config
-│   └── hardware-configuration.nix # Hardware-specific settings
+│   ├── configuration.nix           # system: boot, NVIDIA, audio, greetd, fonts, packages
+│   └── hardware-configuration.nix  # generated per machine
 ├── home/
-│   └── default.nix                # Home Manager user configuration
+│   └── default.nix                 # user: Caelestia settings, terminal, fish, GTK, dotfiles
 ├── configs/
 │   ├── hypr/
-│   │   ├── hyprland.conf         # Hyprland main config
-│   │   ├── theme.conf            # Color scheme and styling
-│   │   └── hyprpaper.conf        # Wallpaper configuration
-│   ├── waybar/
-│   │   ├── config.jsonc          # Waybar modules
-│   │   ├── style.css             # Waybar styling
-│   │   └── colors.css            # Waybar color variables
-│   ├── swaync/
-│   │   ├── config.json           # Notification center config
-│   │   └── style.css             # Notification styling
-│   └── fastfetch/
-│       └── config.jsonc          # System info display config
-└── scripts/
-    ├── apply.sh                   # Quick apply script
-    └── power-profile.sh           # Power management utility
+│   │   ├── hyprland.conf           # binds, rules, input, environment
+│   │   └── theme.conf              # palette, borders, blur, animations
+│   └── fastfetch/config.jsonc
+├── scripts/
+│   ├── power-profile.sh            # the four power modes
+│   └── apply.sh                    # legacy rebuild helper
+├── assets/kanade/                  # cursor theme
+└── wallpaper.png                   # copied to ~/Pictures/Wallpapers on switch
 ```
 
----
+## License
 
-## 🎨 Customization
+MIT. See `LICENSE`. Take whatever is useful, and if something breaks, the boot menu still has the previous generation waiting, which is Nix's way of forgiving you in advance.
 
-### Changing Colors
+## Thanks
 
-The configuration uses Anthropic-inspired colors. To customize:
-
-1. **Terminal (Kitty)** - Edit `home/default.nix` lines 217-226
-2. **Fuzzel Launcher** - Edit `home/default.nix` lines 262-269
-3. **Waybar** - Edit `configs/waybar/colors.css`
-4. **Hyprland Theme** - Edit `configs/hypr/theme.conf`
-5. **SwayNC** - Edit `configs/swaync/style.css`
-
-### Adding Packages
-
-**System-wide packages:**
-```nix
-# Edit nixos/configuration.nix, add to environment.systemPackages
-environment.systemPackages = with pkgs; [
-  your-package
-];
-```
-
-**User packages:**
-```nix
-# Edit home/default.nix, add to home.packages
-home.packages = with pkgs; [
-  your-package
-];
-```
-
-### Hyprland Configuration
-
-Main config file: `configs/hypr/hyprland.conf`
-
-- **Keybindings** - Search for `bind =` lines
-- **Window Rules** - Search for `windowrule` lines
-- **Animations** - Adjust in the `animation` section
-- **Gaps & Borders** - Modify in `general` section
-
----
-
-## ⌨️ Keybindings
-
-### Essential Keybindings
-
-| Key Combination | Action |
-|----------------|--------|
-| `SUPER + Q` | Launch terminal (Kitty) |
-| `SUPER + D` | Application launcher (Fuzzel) |
-| `SUPER + C` | Close active window |
-| `SUPER + V` | Toggle floating mode |
-| `SUPER + F` | Toggle fullscreen |
-| `SUPER + E` | File manager (Thunar) |
-| `SUPER + B` | Web browser (Firefox) |
-| `SUPER + L` | Lock screen |
-| `SUPER + M` | Exit/logout menu |
-
-### Window Navigation
-
-| Key Combination | Action |
-|----------------|--------|
-| `SUPER + ←/→/↑/↓` | Move focus |
-| `SUPER + 1-9` | Switch to workspace |
-| `SUPER + SHIFT + 1-9` | Move window to workspace |
-| `SUPER + Mouse Left` | Move window |
-| `SUPER + Mouse Right` | Resize window |
-| `ALT + Tab` | Cycle windows |
-
-### Utilities
-
-| Key Combination | Action |
-|----------------|--------|
-| `Print` | Screenshot full screen |
-| `SHIFT + Print` | Screenshot area |
-| `SUPER + SHIFT + S` | Toggle special workspace |
-| `SUPER + CTRL + V` | Clipboard history |
-| `XF86AudioMute` | Toggle mute |
-| `XF86AudioRaiseVolume` | Increase volume |
-| `XF86AudioLowerVolume` | Decrease volume |
-| `XF86MonBrightnessUp` | Increase brightness |
-| `XF86MonBrightnessDown` | Decrease brightness |
-
-> **Note:** Check `configs/hypr/hyprland.conf` for complete keybinding list
-
----
-
-## 🔧 Useful Commands
-
-### System Management
-
-```bash
-# Update system
-nh os switch
-
-# Update home manager only
-nh home switch
-
-# Clean old generations
-nh clean all
-
-# Check system differences after rebuild
-nvd diff /run/current-system result
-
-# Search packages
-nix search nixpkgs <package-name>
-```
-
-### Power Management
-
-```bash
-# These are shell aliases defined in home/default.nix
-
-# View current power profile
-power
-
-# Switch to performance mode
-performa
-
-# Switch to balanced mode (alias for the script's "balance" profile)
-hemat
-# Or call the script directly:
-power-profile.sh balance
-
-# Switch to power-saver mode
-ultra-hemat
-```
-
-### NVIDIA Commands
-
-```bash
-# Run app with NVIDIA GPU
-nvidia-offload <command>
-
-# Example: Run game with NVIDIA
-nvidia-offload steam
-
-# Check NVIDIA GPU status
-nvidia-smi
-```
-
-### Development
-
-```bash
-# Use modern replacements
-ls    # → eza with icons
-cat   # → bat with syntax highlighting
-cd    # → zoxide (smart cd)
-fetch # → fastfetch system info
-```
-
----
-
-## 🐛 Troubleshooting
-
-### NVIDIA Issues
-
-If you experience graphics issues:
-
-1. **Check bus IDs are correct:**
-   ```bash
-   lspci | grep -E "VGA|3D"
-   ```
-   Update in `nixos/configuration.nix` lines 256-257
-
-2. **Verify NVIDIA is loaded:**
-   ```bash
-   lsmod | grep nvidia
-   ```
-
-3. **Check Hyprland is using correct GPU:**
-   ```bash
-   hyprctl monitors
-   ```
-
-### Audio Not Working
-
-1. **Restart PipeWire:**
-   ```bash
-   systemctl --user restart pipewire pipewire-pulse wireplumber
-   ```
-
-2. **Check audio devices:**
-   ```bash
-   pactl list sinks
-   ```
-
-### Touchpad Issues
-
-If touchpad doesn't work, ensure modules are loaded:
-```bash
-lsmod | grep i2c_hid
-```
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to:
-
-- Report bugs
-- Suggest features
-- Submit pull requests
-- Share your customizations
-
----
-
-## 📝 License
-
-This configuration is provided as-is for personal use and learning. Feel free to use, modify, and share.
-
----
-
-## 🙏 Acknowledgments
-
-- [NixOS](https://nixos.org/) - The purely functional Linux distribution
-- [Hyprland](https://hyprland.org/) - Dynamic tiling Wayland compositor
-- [Home Manager](https://github.com/nix-community/home-manager) - Dotfile management
-- [Anthropic](https://www.anthropic.com/) - Color scheme inspiration
-
----
-
-<div align="center">
-
-**Built with ❤️ using NixOS and Hyprland**
-
-⭐ Star this repo if you find it useful!
-
-</div>
+To the [NixOS](https://nixos.org/), [Hyprland](https://hyprland.org/) and [Home Manager](https://github.com/nix-community/home-manager) projects, and to the authors of [Caelestia Shell](https://github.com/caelestia-dots/shell), whose work replaced several of this repository's former dependencies.
