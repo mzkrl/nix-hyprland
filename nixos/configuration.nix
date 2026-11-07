@@ -106,7 +106,7 @@ programs.nh = {
   enable = true;
   clean.enable = true;
   clean.extraArgs = "--keep-since 7d --keep 3";
-  flake = "/home/juang/Pictures/hyprland/hyprland-claude";
+  flake = "/home/juang/Documents/flake/nix-hyperland";
 };
 
 # GPG Agent + Pinentry (Qt for Wayland/Hyprland) — fixes "No pinentry"

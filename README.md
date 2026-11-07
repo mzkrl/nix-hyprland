@@ -53,7 +53,7 @@ Nothing here is difficult, but a few values are personal and need replacing befo
 
 3. **Replace the username.** The user is called `juang`, and the name appears in several places. Run `grep -rn juang .` to see them all. The main ones are `users.users.juang` and the greetd session user in `nixos/configuration.nix`, `home-manager.users.juang` in `flake.nix`, and the username, home directory, launcher entries and aliases in `home/default.nix`.
 
-4. **Replace the checkout path.** The repository is expected to live at `/home/juang/Pictures/hyprland/hyprland-claude`, and that path is written into `programs.nh.flake`, the `update` aliases, the wallpaper command in `hyprland.conf`, and the line at the top of `hyprland.conf` that sources `theme.conf`. `grep -rn hyprland-claude .` finds them.
+4. **Replace the checkout path.** The repository is expected to live at `/home/juang/Documents/flake/nix-hyperland`, and that path is written into `programs.nh.flake`, the `update` aliases, the wallpaper command in `hyprland.conf`, and the line at the top of `hyprland.conf` that sources `theme.conf`. `grep -rn nix-hyperland .` finds them.
 
 5. **Check the GPU section.** Run `lspci | grep -E "VGA|3D"` and compare the bus IDs against the ones in `nixos/configuration.nix`. Without an NVIDIA GPU, remove the `hardware.nvidia` block and the NVIDIA environment variables in `configuration.nix`, `home/default.nix` and `hyprland.conf`.
 
