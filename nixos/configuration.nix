@@ -109,6 +109,13 @@ programs.nh = {
   flake = "/home/juang/Pictures/hyprland/hyprland-claude";
 };
 
+# GPG Agent + Pinentry (Qt for Wayland/Hyprland) — fixes "No pinentry"
+programs.gnupg.agent = {
+  enable = true;
+  enableSSHSupport = true;
+  pinentryPackage = pkgs.pinentry-qt;
+};
+
 # List packages installed in system profile.
 environment.systemPackages = with pkgs; [
   # --- Core System & Authentication ---
@@ -124,8 +131,8 @@ environment.systemPackages = with pkgs; [
   tuigreet              # Login manager
   
   # --- General Utilities & CLI Basics ---
-  wget curl git gh glab jq python3
-  killall pciutils iproute2 procps
+  wget curl git gh glab jq python3 uv
+  killall pciutils iproute2 procps gnupg
   bat htop btop eza fastfetch 
   #php php84Packages.composer #aih najis selesai uprak apus
   
@@ -133,6 +140,8 @@ environment.systemPackages = with pkgs; [
   gparted baobab wlr-randr
   pavucontrol brightnessctl playerctl
   libnotify
+  nvidia-vaapi-driver # VAAPI -> VDPAU/NVDEC bridge for HW video decode (Brave etc.)
+  cloudflare-warp
 
   # --- Main Applications ---
   brave discord antigravity thunar tailscale #zed-editor #vscode #steam
@@ -178,6 +187,8 @@ environment.systemPackages = with pkgs; [
   services.gvfs.enable = true;
   services.tumbler.enable = true;
   services.blueman.enable = true;
+  services.cloudflare-warp.enable = true;
+  services.cloudflare-warp.openFirewall = true;
   
   security.rtkit.enable = true;
   services.pipewire = {
@@ -197,6 +208,14 @@ environment.systemPackages = with pkgs; [
   xdg.portal = {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
+    config.hyprland = {
+      default = "hyprland;gtk";
+      "org.freedesktop.impl.portal.Settings" = "gtk";
+      "org.freedesktop.impl.portal.FileChooser" = "gtk";
+      # Fix warp-taskbar "Login via browser" — Hyprland portal doesn't
+      # implement OpenURI, route it to GTK so Qt can open Brave.
+      "org.freedesktop.impl.portal.OpenURI" = "gtk";
+    };
   };
 
   security.polkit.enable = true;

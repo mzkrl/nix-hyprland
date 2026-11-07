@@ -14,11 +14,23 @@
     package = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.with-cli;
     cli = {
       enable = true; # Add `caelestia` CLI to PATH (wallpaper, screenshot, clipboard, emoji, shell IPC)
-      # Written to ~/.config/caelestia/cli.json (CLI config) — read by `caelestia record`
+      # Written to ~/.config/caelestia/cli.json — read by `caelestia record`
       settings = {
         # No VAAPI/NVENC encoder available on this GPU stack — fall back to CPU encoding
         record = {
           extraArgs = [ "-fallback-cpu-encoding" "yes" ];
+        };
+        # Caelestia GTK stays ON (don't neuter the rice).
+        # Only patch upstream bugs that make Thunar dark-on-dark:
+        #  1) theme_selected_fg_color uses @primary (undefined) -> black selected text.
+        #  2) Thunar view/sidebar/path buttons inherit no fg -> dark text on #1c1b1f.
+        theme = {
+          postHook = ''
+            sed -i 's/@define-color theme_selected_fg_color @primary;.*/@define-color theme_selected_fg_color @accent_color;/' ~/.config/gtk-3.0/gtk.css ~/.config/gtk-4.0/gtk.css 2>/dev/null || true
+            for v in 3.0 4.0; do
+              grep -q "thunar-readable-fix" ~/.config/gtk-$v/gtk.css 2>/dev/null || printf '\n/* thunar-readable-fix */\n.thunar .frame.standard-view .view, .thunar .sidebar .view, .thunar .path-bar-button, .thunar .location-button, .thunar header.top tabs .reorderable-page, .thunar statusbar, .thunar entry { color: #e5e1e7; }\n.thunar .frame.standard-view .view *:selected { color: #c2c1ff; background-color: alpha(#c2c1ff, 0.15); }\n' >> ~/.config/gtk-$v/gtk.css 2>/dev/null || true
+            done
+          '';
         };
       };
     };
@@ -286,10 +298,15 @@ home.file.".config/fuzzel/fuzzel.ini" = {
   force = true; # overwrite any unmanaged existing fuzzel.ini
 };
 
-# HM's GTK module writes these; allow it to claim them even if an unmanaged
-# copy already exists
-xdg.configFile."gtk-4.0/gtk.css".force = true;
-xdg.configFile."gtk-3.0/gtk.css".force = true;
+# Caelestia owns gtk.css/thunar.css — HM must not deploy gtk-4.0/gtk.css
+# (HM's is just an Adwaita import and would collide with Caelestia's file).
+xdg.configFile."gtk-4.0/gtk.css".enable = false;
+
+# Drop stale .backup files BEFORE HM checks for collisions, otherwise the
+# next switch fails with "would be clobbered" for caelestia/cli.json.backup.
+home.activation.removeStaleCaelestiaBackups = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+  rm -f "$HOME/.config/caelestia/shell.json.backup" "$HOME/.config/caelestia/cli.json.backup" "$HOME/.config/gtk-4.0/gtk.css.backup" "$HOME/.config/gtk-3.0/gtk.css.backup" 2>/dev/null || true
+'';
 
 # ─── Caelestia writable configs (so Nexus / CLI can save) ───────────
 # HM deploys shell.json & cli.json as read-only store symlinks, which makes
@@ -358,19 +375,8 @@ programs.fish = {
         # Keep CSD/headerbar dark even when an app ignores the theme variant
         "gtk-application-prefer-dark-theme" = 1;
       };
-      # Thunar: force dark headerbar + readable light text (Anthropic palette)
-      extraCss = ''
-        headerbar, .titlebar, windowheader { background-color: #1d1d1c; color: #faf9f5; }
-        headerbar label, headerbar button { color: #faf9f5; }
-        window, .background, treeview, list { background-color: #141413; color: #faf9f5; }
-        button, entry, menubar, menu, .menu, .context-menu { background-color: #1d1d1c; color: #faf9f5; }
-      '';
+      # No extraCss: keep Caelestia colors, selected text patched via postHook above.
     };
-    gtk4.extraCss = ''
-      headerbar, .titlebar { background-color: #1d1d1c; color: #faf9f5; }
-      window, .background { background-color: #141413; color: #faf9f5; }
-      button, entry { background-color: #1d1d1c; color: #faf9f5; }
-    '';
 #    cursorTheme = {
 #      name = "Adwaita";
 #      package = pkgs.adwaita-icon-theme;
