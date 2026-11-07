@@ -145,7 +145,7 @@ environment.systemPackages = with pkgs; [
 
   # --- Main Applications ---
   discord antigravity thunar tailscale #zed-editor #vscode #steam
-  # brave removed from nixpkgs (2026-11) -> use Flatpak: flatpak install -y flathub org.brave.Brave
+  # brave removed from nixpkgs (2026-11) -> use Flatpak: flatpak install -y flathub com.brave.Browser
 ];
 
   # Fonts configuration

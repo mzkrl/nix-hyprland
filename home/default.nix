@@ -117,7 +117,7 @@
     fuzzel               # dependency for `caelestia clipboard` & `caelestia emoji`
     kitty                # Terminal
     (writeShellScriptBin "brave" ''
-      exec flatpak run org.brave.Brave --ozone-platform-hint=auto --enable-features=AcceleratedVideoDecodeLinuxGL --disable-features=OutdatedBuildDetector "$@"
+      exec flatpak run com.brave.Browser --ozone-platform-hint=auto --enable-features=AcceleratedVideoDecodeLinuxGL --disable-features=OutdatedBuildDetector "$@"
     '') # Brave via Flatpak (removed from nixpkgs) — keep `brave` cmd
 
     # --- Clipboard & Screenshot (used by `caelestia`) ---
@@ -429,11 +429,11 @@ programs.fish = {
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "text/html" = "org.brave.Brave.desktop";
-      "x-scheme-handler/http" = "org.brave.Brave.desktop";
-      "x-scheme-handler/https" = "org.brave.Brave.desktop";
-      "x-scheme-handler/about" = "org.brave.Brave.desktop";
-      "x-scheme-handler/unknown" = "org.brave.Brave.desktop";
+      "text/html" = "com.brave.Browser.desktop";
+      "x-scheme-handler/http" = "com.brave.Browser.desktop";
+      "x-scheme-handler/https" = "com.brave.Browser.desktop";
+      "x-scheme-handler/about" = "com.brave.Browser.desktop";
+      "x-scheme-handler/unknown" = "com.brave.Browser.desktop";
     };
   };
   
