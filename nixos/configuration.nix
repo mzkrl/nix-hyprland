@@ -144,7 +144,8 @@ environment.systemPackages = with pkgs; [
   cloudflare-warp
 
   # --- Main Applications ---
-  brave discord antigravity thunar tailscale #zed-editor #vscode #steam
+  discord antigravity thunar tailscale #zed-editor #vscode #steam
+  # brave removed from nixpkgs (2026-11) -> use Flatpak: flatpak install -y flathub org.brave.Brave
 ];
 
   # Fonts configuration

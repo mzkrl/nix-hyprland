@@ -116,6 +116,9 @@
     yt-dlp               # YouTube/streaming for mpv
     fuzzel               # dependency for `caelestia clipboard` & `caelestia emoji`
     kitty                # Terminal
+    (writeShellScriptBin "brave" ''
+      exec flatpak run org.brave.Brave --ozone-platform-hint=auto --enable-features=AcceleratedVideoDecodeLinuxGL --disable-features=OutdatedBuildDetector "$@"
+    '') # Brave via Flatpak (removed from nixpkgs) — keep `brave` cmd
 
     # --- Clipboard & Screenshot (used by `caelestia`) ---
     wl-clipboard
@@ -137,6 +140,10 @@
     starship
     wev                    # Debug keyland events
     lm_sensors
+
+    # --- APP PALING WAJIB!!! ---
+    spotify
+    spicetify-cli
 
     # --- Nix OS Utilities ---
     nh
@@ -422,11 +429,11 @@ programs.fish = {
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "text/html" = "brave-browser.desktop";
-      "x-scheme-handler/http" = "brave-browser.desktop";
-      "x-scheme-handler/https" = "brave-browser.desktop";
-      "x-scheme-handler/about" = "brave-browser.desktop";
-      "x-scheme-handler/unknown" = "brave-browser.desktop";
+      "text/html" = "org.brave.Brave.desktop";
+      "x-scheme-handler/http" = "org.brave.Brave.desktop";
+      "x-scheme-handler/https" = "org.brave.Brave.desktop";
+      "x-scheme-handler/about" = "org.brave.Brave.desktop";
+      "x-scheme-handler/unknown" = "org.brave.Brave.desktop";
     };
   };
   
