@@ -4,6 +4,60 @@
 
 { config, pkgs, ... }:
 
+let
+  # Discord 1.0.159 hardcodes libopenh264-2.5.1-linux64.7.so but its asset
+  # downloader fetches 2.7.0. The bundled ffmpeg then fails to open the
+  # decoder (AVERROR_UNKNOWN) and H.264 streams stay black. Pin the 2.5.1
+  # build Discord expects so Go Live/H.264 receive works.
+  discordOpenH264 = pkgs.runCommandLocal "discord-openh264-2.5.1" {
+    nativeBuildInputs = [ pkgs.bzip2 ];
+  } ''
+    mkdir -p $out
+    bunzip2 -c ${pkgs.fetchurl {
+      url = "https://ciscobinary.openh264.org/libopenh264-2.5.1-linux64.7.so.bz2";
+      hash = "sha256-guQ224YGQz4/gjx//zJpxDs7o/ElEKhR73sVa4CtGxE=";
+    }} > $out/libopenh264-2.5.1-linux64.7.so
+  '';
+
+  # Wrapper shared by the lowercase `discord` command and the uppercase
+  # `Discord` binary the desktop entry actually executes. It forces software
+  # decode (NVDEC -> Intel glitch) and keeps the pinned OpenH264 library alive
+  # while Discord runs (its startup cleanup deletes 2.5.1 as "unused").
+  discordWrapped = pkgs.writeShellScriptBin "discord" ''
+    assetdir="$HOME/.config/discord/discord_asset_cache/openh264"
+    lib="libopenh264-2.5.1-linux64.7.so"
+    mkdir -p "$assetdir"
+
+    restore_openh264() {
+      [ -e "$assetdir/$lib" ] || cp ${discordOpenH264}/$lib "$assetdir/$lib"
+    }
+    restore_openh264
+
+    ${pkgs.discord}/bin/discord --disable-gpu --disable-accelerated-video-decode "$@" &
+    discord_pid=$!
+    trap 'kill "$discord_pid" 2>/dev/null' TERM INT HUP
+
+    while kill -0 "$discord_pid" 2>/dev/null; do
+      restore_openh264
+      sleep 1
+    done
+    wait "$discord_pid"
+  '';
+
+  # Keep Discord's desktop file, icons and data, but replace both binary names
+  # so every launch path (Caelestia/app2unit uses Exec=Discord) hits the
+  # wrapper instead of the raw package.
+  discordFixed = pkgs.symlinkJoin {
+    name = "discord-fixed";
+    paths = [ pkgs.discord ];
+    postBuild = ''
+      rm -f $out/bin/discord $out/bin/Discord
+      cp ${discordWrapped}/bin/discord $out/bin/discord
+      chmod +x $out/bin/discord
+      ln -s discord $out/bin/Discord
+    '';
+  };
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -144,7 +198,7 @@ environment.systemPackages = with pkgs; [
   cloudflare-warp
 
   # --- Main Applications ---
-  discord antigravity thunar tailscale #zed-editor #vscode #steam
+  discordFixed antigravity thunar #zed-editor #vscode #steam
   # brave removed from nixpkgs (2026-11) -> use Flatpak: flatpak install -y flathub com.brave.Browser
 ];
 
@@ -190,6 +244,15 @@ environment.systemPackages = with pkgs; [
   services.blueman.enable = true;
   services.cloudflare-warp.enable = true;
   services.cloudflare-warp.openFirewall = true;
+
+  # Tailscale VPN (client daemon). After `nh os switch`, run `tailscale up`
+  # once to log in. --operator lets the juang user manage the daemon without
+  # sudo; openFirewall allows direct (non-DERP) peer connections.
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
+    extraSetFlags = [ "--operator=juang" ];
+  };
   
   security.rtkit.enable = true;
   services.pipewire = {

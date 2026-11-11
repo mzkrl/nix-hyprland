@@ -116,9 +116,14 @@
     yt-dlp               # YouTube/streaming for mpv
     fuzzel               # dependency for `caelestia clipboard` & `caelestia emoji`
     kitty                # Terminal
+    # Brave via Flatpak (removed from nixpkgs). Software decode only:
+    # NVIDIA NVDEC + Intel iGPU render hit cross-GPU DMABUF import
+    # failures (eglCreateImage 0x3009) -> glitchy/green video.
     (writeShellScriptBin "brave" ''
-      exec flatpak run com.brave.Browser --ozone-platform-hint=auto --enable-features=AcceleratedVideoDecodeLinuxGL --disable-features=OutdatedBuildDetector "$@"
-    '') # Brave via Flatpak (removed from nixpkgs) — keep `brave` cmd
+      exec flatpak run com.brave.Browser --ozone-platform-hint=auto --disable-features=AcceleratedVideoDecodeLinuxGL "$@"
+    '') # keep `brave` cmd
+    # Discord is installed system-wide and fixed in nixos/configuration.nix
+    # (discordFixed), because its desktop entry launches `Discord` directly.
 
     # --- Clipboard & Screenshot (used by `caelestia`) ---
     wl-clipboard
@@ -142,8 +147,16 @@
     lm_sensors
 
     # --- APP PALING WAJIB!!! ---
-    spotify
     spicetify-cli
+    # Spotify via wrapper only (don't list pkgs.spotify here too — buildEnv conflict).
+    # Same cross-GPU NVDEC->Intel glitch as Brave/Discord for Canvas/video.
+    (writeShellScriptBin "spotify" ''
+      if [ -x "$HOME/.local/share/spotify/spotify" ]; then
+        exec "$HOME/.local/share/spotify/spotify" --ozone-platform-hint=auto --disable-gpu --disable-accelerated-video-decode "$@"
+      else
+        exec ${pkgs.spotify}/bin/spotify --ozone-platform-hint=auto --disable-gpu --disable-accelerated-video-decode "$@"
+      fi
+    '')
 
     # --- Nix OS Utilities ---
     nh
@@ -248,6 +261,9 @@ programs.kitty = {
 
 # Wallpaper for Caelestia's wallpaper switcher (launcher `>wallpaper`)
 home.file."Pictures/Wallpapers/wallpaper.png".source = ../wallpaper.png;
+
+# Spotify desktop file (so Caelestia launcher sees it; wrapper only ships bin/spotify)
+home.file.".local/share/applications/spotify.desktop".source = "${pkgs.spotify}/share/spotify/spotify.desktop";
 
 # Fastfetch
 home.file.".config/fastfetch/config.jsonc".source = ../configs/fastfetch/config.jsonc;
@@ -437,8 +453,62 @@ programs.fish = {
     };
   };
   
+  # Make Spicetify able to detect Spotify on NixOS and make OAuth open Brave.
+  # Store is read-only, so Spicetify must point at a writable copy.
+  home.activation.setupSpicetify = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    cfg="$HOME/.config/spicetify/config-xpui.ini"
+    mkdir -p "$(dirname "$cfg")" "$HOME/.config/spotify" "$HOME/.local/share/spotify" 2>/dev/null || true
+    if [ ! -f "$HOME/.local/share/spotify/spotify" ] || ! grep -q "1.2." "$HOME/.local/share/spotify/spotify" 2>/dev/null; then
+      chmod -R u+w "$HOME/.local/share/spotify" 2>/dev/null || true
+      rm -rf "$HOME/.local/share/spotify"
+      mkdir -p "$HOME/.local/share/spotify"
+      cp -aL ${pkgs.spotify}/share/spotify/. "$HOME/.local/share/spotify/" 2>/dev/null || true
+      chmod -R u+w "$HOME/.local/share/spotify" 2>/dev/null || true
+    fi
+    if [ ! -f "$cfg" ]; then
+      cat > "$cfg" <<EOF
+[Setting]
+spotify_path           = $HOME/.local/share/spotify
+inject_theme_js        = 1
+replace_colors         = 1
+overwrite_assets       = 0
+spotify_launch_flags   = --disable-gpu --disable-accelerated-video-decode
+prefs_path             = $HOME/.config/spotify/prefs
+current_theme          =
+color_scheme           =
+inject_css             = 1
+check_spicetify_update = 1
+always_enable_devtools = 0
+
+[Preprocesses]
+disable_sentry     = 1
+disable_ui_logging = 1
+remove_rtl_rule    = 1
+expose_apis        = 1
+
+[AdditionalOptions]
+extensions            =
+custom_apps           =
+sidebar_config        = 0
+home_config           = 1
+experimental_features = 1
+
+[Patch]
+
+[Backup]
+version =
+with    =
+EOF
+    else
+      sed -i "s|^spotify_path.*|spotify_path           = $HOME/.local/share/spotify|" "$cfg" 2>/dev/null || true
+      sed -i "s|^prefs_path.*|prefs_path             = $HOME/.config/spotify/prefs|" "$cfg" 2>/dev/null || true
+      sed -i "s|^spotify_launch_flags.*|spotify_launch_flags   = --disable-gpu --disable-accelerated-video-decode|" "$cfg" 2>/dev/null || true
+    fi
+  '';
+
   # Environment Variables
   home.sessionVariables = {
+    BROWSER = "brave";  # Spotify OAuth + xdg-open land in Brave, not dead
     NIXOS_OZONE_WL = "1";
     WLR_NO_HARDWARE_CURSORS = "1";
     LIBVA_DRIVER_NAME = "nvidia";
