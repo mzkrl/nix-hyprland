@@ -114,6 +114,14 @@
     gpu-screen-recorder  # `caelestia record`
     mpv                  # Video playback (Caelestia launcher `>playback`)
     yt-dlp               # YouTube/streaming for mpv
+
+    # Brave: wrapper disables HW video decode. Decoding happens on the NVIDIA
+    # NVDEC (via nvidia-vaapi-driver) but Brave renders on the Intel iGPU, and
+    # the cross-GPU DMABUF import fails (eglCreateImage 0x3009 flood) -> glitchy
+    # video. Software decode matches the YouTube path, which already works fine.
+    (writeShellScriptBin "brave" ''
+      exec ${pkgs.brave}/bin/brave --disable-features=AcceleratedVideoDecodeLinuxGL "$@"
+    '')
     fuzzel               # dependency for `caelestia clipboard` & `caelestia emoji`
     kitty                # Terminal
     # Brave via Flatpak (removed from nixpkgs). Software decode only:
@@ -337,6 +345,9 @@ home.activation.removeStaleCaelestiaBackups = lib.hm.dag.entryBefore [ "checkLin
 # them with real writable copies after every switch (Nexus edits then persist
 # until the next switch; declarative config wins on rebuild).
 home.activation.makeCaelestiaConfigsWritable = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+  # Drop stale backups so HM's next linkGeneration backup step never clobbers
+  # (its "would be clobbered" check is fatal).
+  rm -f "$HOME/.config/caelestia/shell.json.backup" "$HOME/.config/caelestia/cli.json.backup"
   for f in shell.json cli.json; do
     target="$HOME/.config/caelestia/$f"
     if [ -L "$target" ]; then
@@ -349,6 +360,11 @@ home.activation.makeCaelestiaConfigsWritable = lib.hm.dag.entryAfter [ "linkGene
     fi
   done
 '';
+
+# HM's GTK module generates gtk-4.0/gtk.css from `gtk.gtk4.theme` (dark import).
+# force keeps it overwriting any manually dropped copies so the white-flash
+# theme never comes back.
+xdg.configFile."gtk-4.0/gtk.css".force = true;
 programs.fish = {
   enable = true;
   interactiveShellInit = ''
@@ -384,6 +400,10 @@ programs.fish = {
 # GTK Theme Configuration
   gtk = {
     enable = true;
+    # Makes GTK4/libadwaita apps (baobab, etc.) dark: writes
+    # gtk-application-prefer-dark-theme in gtk-3.0 & gtk-4.0 settings.ini,
+    # which xdg-desktop-portal-gtk also reports to libadwaita apps.
+    colorScheme = "dark";
     theme = {
       name = "Adwaita-dark";
       package = pkgs.gnome-themes-extra;
@@ -437,9 +457,6 @@ programs.fish = {
     # Hyprland upstream will drop hyprlang support in a future release.
     configType = "hyprlang";
   };
-
-  # Startpage
-  home.file.".config/startpage/index.html".source = ../configs/startpage/index.html;
 
   # Default Applications
   xdg.mimeApps = {
