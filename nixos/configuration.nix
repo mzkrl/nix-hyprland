@@ -80,8 +80,11 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
 
-  # Use latest kernel and NVIDIA optimizations for Hyprland
-  boot.kernelPackages = pkgs.linuxPackages; # _latest;  #saat ini lagi ga pake yg latest, kenak masalah sama driver nvidia, tapi boleh di coba.
+  # Linux 7.3 ("latest"). nixpkgs 26.05 ships NVIDIA 595.71.05, which cannot
+  # build against 7.3: the kernel removed strncpy() and rewrote the DRM
+  # atomic API (drm_atomic_state -> drm_atomic_commit). NVIDIA fixed this in
+  # 595.112.07, which we build below via nvidiaPackages.mkDriver.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = [ 
     "nvidia_drm.fbdev=1" 
     "nvidia-drm.modeset=1"
@@ -313,7 +316,17 @@ environment.systemPackages = with pkgs; [
     powerManagement.finegrained = true;
     open = false;
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    # NVIDIA 595.71.05 (nixpkgs 26.05) doesn't support Linux 7.3. Build
+    # 595.112.07 (hashes from nixpkgs-unstable) with the stable driver
+    # builder. Drop this once nixpkgs 26.05 ships a 7.3-capable driver.
+    package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
+      version = "595.112.07";
+      sha256_64bit = "sha256-Gjjs1Tii2mIypzMBhAY69Z6fyUbJCMylVb0HkJhIufA=";
+      sha256_aarch64 = "sha256-7qQuOKX9xS/wpKa+bEOqsS2euJjJu182vl+6UU6bxR0=";
+      openSha256 = "sha256-nQnXGCcvo4i7eGaVft3Xc9dRUPPH0v9Zi87cfI4i/Ys=";
+      settingsSha256 = "sha256-2bWSou/9J3EojhSRXBol/+yGGu2XZ6EuCptb5qXHM14=";
+      persistencedSha256 = "sha256-cGMEUXN7WPu822zZDLTSu6Owj8VXG4PNmhe9oKqMMKI=";
+    };
 
     # PRIME Configuration (Hybrid Graphics)
     prime = {

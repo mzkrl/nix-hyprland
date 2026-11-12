@@ -5,7 +5,7 @@
 
   home.username = "juang";
   home.homeDirectory = "/home/juang";
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
 
   # Caelestia Shell Configuration (full feature set)
   programs.caelestia = {
@@ -115,13 +115,6 @@
     mpv                  # Video playback (Caelestia launcher `>playback`)
     yt-dlp               # YouTube/streaming for mpv
 
-    # Brave: wrapper disables HW video decode. Decoding happens on the NVIDIA
-    # NVDEC (via nvidia-vaapi-driver) but Brave renders on the Intel iGPU, and
-    # the cross-GPU DMABUF import fails (eglCreateImage 0x3009 flood) -> glitchy
-    # video. Software decode matches the YouTube path, which already works fine.
-    (writeShellScriptBin "brave" ''
-      exec ${pkgs.brave}/bin/brave --disable-features=AcceleratedVideoDecodeLinuxGL "$@"
-    '')
     fuzzel               # dependency for `caelestia clipboard` & `caelestia emoji`
     kitty                # Terminal
     # Brave via Flatpak (removed from nixpkgs). Software decode only:
